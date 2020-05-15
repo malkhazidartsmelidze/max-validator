@@ -1,0 +1,25 @@
+{
+  "name": "react-validate",
+  "version": "1.0.0",
+  "description": "Advanced validation library for react",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malkhazidartsmelidze/react-validate.git"
+  },
+  "keywords": [
+    "react",
+    "react-validation",
+    "validation",
+    "validate"
+  ],
+  "author": "Malkhazi Dartsmelidze",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/malkhazidartsmelidze/react-validate/issues"
+  },
+  "homepage": "https://github.com/malkhazidartsmelidze/react-validate#readme"
+}
