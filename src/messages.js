@@ -6,4 +6,5 @@ module.exports = {
   checked: ':name must be checked',
   array: ':name must be array',
   object: ':name must be object',
+  boolean: ':name must be boolean',
 };
