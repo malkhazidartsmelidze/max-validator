@@ -1,6 +1,5 @@
 var validator = require('./Validator/Validator.js');
 
-console.time('max');
 var result = validator.validate(
   {
     firstname: 'malkhazi',
@@ -13,6 +12,7 @@ var result = validator.validate(
     number: '598571672',
     name: 'maakho1',
     ald: 'maak1ho-',
+    mail: 'darcmelidze1997g.com',
   },
   {
     firstname: 'required|between:5,50',
@@ -27,9 +27,9 @@ var result = validator.validate(
     number: 'nullable|alpha_numeric',
     name: 'nullable|alpha',
     ald: 'nullable|alpha_dash',
+    mail: 'nullable|email',
   }
 );
-console.timeEnd('max');
 console.log(result);
 // Rule.parseScheme({
 //   name: 'required|min_length:5|max_length:20',

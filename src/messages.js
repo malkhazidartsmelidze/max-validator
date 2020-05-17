@@ -11,4 +11,5 @@ module.exports = {
   alpha_numeric: ':name can only contain numbers',
   alpha_dash: ':name can only contain letters and dashes',
   alpha: ':name can only contain leters',
+  email: ':name must be correct mail',
 };

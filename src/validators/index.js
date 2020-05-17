@@ -8,6 +8,7 @@ module.exports = {
   boolean: require('./boolean'),
   alpha_numeric: require('./alpha_numeric'),
   alpha: require('./alpha'),
+  email: require('./email'),
   alpha_dash: require('./alpha_dash'),
 };
 
