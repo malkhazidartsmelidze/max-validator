@@ -1,6 +1,6 @@
 var validator = require('./Validator/Validator.js');
-var checked = require('./validators/checked');
 
+console.time('max');
 var result = validator.validate(
   {
     firstname: 'malkhazi',
@@ -29,6 +29,7 @@ var result = validator.validate(
     ald: 'nullable|alpha_dash',
   }
 );
+console.timeEnd('max');
 console.log(result);
 // Rule.parseScheme({
 //   name: 'required|min_length:5|max_length:20',
