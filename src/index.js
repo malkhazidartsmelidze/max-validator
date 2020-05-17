@@ -8,7 +8,11 @@ var result = validator.validate(
     waist: '40',
     policy: 12,
     names: 'malkhazi',
-    info: 'not object',
+    info: {},
+    family: 1,
+    number: '598571672',
+    name: 'maakho1',
+    ald: 'maak1ho-',
   },
   {
     firstname: 'required|between:5,50',
@@ -19,6 +23,10 @@ var result = validator.validate(
     policy: 'required|checked',
     names: 'required|array',
     info: 'nullable|object',
+    family: 'nullable|boolean',
+    number: 'nullable|alpha_numeric',
+    name: 'nullable|alpha',
+    ald: 'nullable|alpha_dash',
   }
 );
 console.log(result);

@@ -7,4 +7,8 @@ module.exports = {
   array: ':name must be array',
   object: ':name must be object',
   boolean: ':name must be boolean',
+  array: ':name must be array',
+  alpha_numeric: ':name can only contain numbers',
+  alpha_dash: ':name can only contain letters and dashes',
+  alpha: ':name can only contain leters',
 };
