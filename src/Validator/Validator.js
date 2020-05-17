@@ -7,6 +7,7 @@ function Validator() {
   this.ruleSeparator = '|';
   this.ruleParamSeparator = ':';
   this.paramsSeparator = ',';
+  this.defaultMessage = 'Incorrect Value';
 }
 
 /**
@@ -19,7 +20,22 @@ Validator.prototype.setMessages = function (messages) {
     throw 'Messages must be object';
   }
 
-  this.messages = { ...defaultMessages, ...messages };
+  this.messages = Object.assign(this.messages, messages);
+
+  return this;
+};
+
+/**
+ * Set Default Message of invalid parameter
+ * @param {string} message
+ * @returns {Validator}
+ */
+Validator.prototype.setDefaultMessage = function (msg) {
+  if (typeof msg !== 'object') {
+    throw 'Messages must be object';
+  }
+
+  this.defaultMessage = msg;
 
   return this;
 };
@@ -69,7 +85,7 @@ Validator.prototype.setParamsSeparator = function (separator) {
  * @param {function} validator Custom function for validation
  * @returns {Rule}
  */
-Validator.prototype.extend = function (ruleName, validator) {
+Validator.prototype.extend = function (ruleName, validator, message = null) {
   if (this.validators[ruleName] !== undefined) {
     throw 'Validator named ' + ruleName + ' already exists';
   }
@@ -79,6 +95,12 @@ Validator.prototype.extend = function (ruleName, validator) {
   }
 
   this.validators[ruleName] = validator;
+
+  if (message !== null) {
+    this.setMessages({
+      [ruleName]: message,
+    });
+  }
 
   return this;
 };
@@ -106,6 +128,31 @@ Validator.prototype.exists = function (ruleName) {
 };
 
 /**
+ * Format Validation Messages
+ * @param {string} name Name of validated parameter
+ * @param {object|null} params Name of parameters of rule
+ * @returns {string}
+ */
+Validator.prototype.formatMessage = function (name, params, ruleName) {
+  if (typeof params !== 'object') {
+    params = {};
+  }
+  params.name = name;
+
+  if (this.messages[ruleName] === undefined) {
+    return this.defaultMessage;
+  }
+
+  var message = this.messages[ruleName];
+
+  Object.keys(params).map(function (key) {
+    message = message.replace(':' + key, params[key]);
+  });
+
+  return message;
+};
+
+/**
  * Validate given data with given rules
  * @param {object} data Data to validate
  * @param {object} scheme Validation scheme
@@ -124,20 +171,27 @@ Validator.prototype.validate = function (data, scheme) {
 
   for (paramName in rules) {
     for (var i = 0, l = rules[paramName].rules.length; i < l; i++) {
-      var r = rules[paramName].rules[i];
-      var result = r.validate(rules[paramName], data[paramName]);
+      var rule = rules[paramName].rules[i];
+      var result = rule.validate(rules[paramName], data[paramName]);
 
       if (result === true) continue;
 
-      if (errors[name] === undefined) {
-        errors[name] = [this.formatMessage(r.name)];
+      var err = this.formatMessage(paramName, result, result.rule ? result.rule : rule.name);
+
+      if (errors[paramName] === undefined) {
+        errors[paramName] = [err];
       } else {
-        errors[name].push();
+        errors[paramName].push(err);
       }
 
       hasError = true;
     }
   }
+
+  return {
+    hasError: hasError,
+    errors: errors,
+  };
 };
 
 module.exports = new Validator();

@@ -1,14 +1,22 @@
-const validator = require('./Validator/Validator.js');
-const Rule = require('./Validator/Rule');
+var validator = require('./Validator/Validator.js');
+var checked = require('./validators/checked');
 
-validator.validate(
+validator.extend('checked', checked);
+
+var result = validator.validate(
   {
-    name: 'malkhazi',
+    firstname: 'malkhazi',
     age: 20,
+    waist: '40',
+    policy: 12,
   },
   {
-    name: 'required|between:20,50',
-    age: 'required|between:18,22',
+    firstname: 'required|between:5,50',
+    age: 'required|numeric|between:18,22|min:30',
+    height: 'nullable|between:100,230',
+    weight: 'required|between:1002,230',
+    waist: 'nullable|numeric|between:10,200|max:20',
+    policy: 'required|checked',
   }
 );
 

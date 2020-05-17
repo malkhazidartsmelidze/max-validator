@@ -1,8 +1,12 @@
-const Validator = require('./Validator.js');
+var Validator = require('./Validator.js');
+
+var dontValidate = ['required', 'string', 'nullable', 'numeric'];
 
 function Rule(ruleName) {
   this.name = ruleName;
-  this.validator = Validator.getValidator(this.name);
+  if (dontValidate.indexOf(ruleName) === -1) {
+    this.validator = Validator.getValidator(this.name);
+  }
   this.params = [];
 }
 
@@ -12,11 +16,23 @@ function Rule(ruleName) {
  * @returns {Rule}
  */
 Rule.prototype.validate = function (rules, value) {
-  if (rules.isRequired && (value == undefined || value == null || value == '' || value == 0)) {
-    return false;
+  if (value == undefined || value == null || value == '') {
+    if (rules.isRequired) {
+      return {
+        rule: 'required',
+      };
+    } else if (rules.isNullable) {
+      return true;
+    }
   }
 
-  return this.validator(rules, value, ...this.params);
+  if (rules.isNumeric) {
+    value = parseFloat(value);
+  } else if (value.isString) {
+    value = String(value);
+  }
+
+  return this.validator(value, ...this.params);
 };
 
 /**
@@ -48,12 +64,21 @@ Rule.parseScheme = function (ruleScheme) {
     if (typeof ruleScheme[name] !== 'string') throw 'Validation rules must be string';
     var _rules = Rule.parseRuleSet(ruleScheme[name]);
 
+    var isRequired = _rules.required !== undefined;
+    var isString = _rules.string !== undefined;
+    var isNumeric = _rules.numeric !== undefined;
+    var isNullable = _rules.nullable !== undefined;
+
+    for (var i = 0; i < dontValidate.length; i++) {
+      delete _rules[dontValidate[i]];
+    }
+
     rules[name] = {
       rules: Object.values(_rules),
-      isRequired: _rules.required !== undefined,
-      isString: _rules.string !== undefined,
-      isNumeric: _rules.numeric !== undefined,
-      isNullable: _rules.nullable !== undefined,
+      isRequired: isRequired,
+      isString: isString,
+      isNumeric: isNumeric,
+      isNullable: isNullable,
     };
   }
 

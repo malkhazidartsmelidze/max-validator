@@ -1,13 +1,19 @@
-var required = require('./required');
+module.exports = function (value, from, to) {
+  var err = {
+    from: from,
+    to: to,
+    value: value,
+  };
 
-module.exports = function (rules, value, from, to) {
-  try {
-    if (rules.isString && value) {
-      return value.length >= from && value.length <= to;
+  if (typeof value === 'string') {
+    if (value.length >= from && value.length <= to) {
+      return true;
     }
-
-    return value >= from && value <= to;
-  } catch (err) {
-    return false;
+  } else {
+    if (value >= from && value <= to) {
+      return true;
+    }
   }
+
+  return err;
 };

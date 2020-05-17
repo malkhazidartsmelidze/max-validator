@@ -1,3 +1,13 @@
-module.exports = function (value, max = 0) {
-  console.log('Max: ', value, max);
+module.exports = function (value, max) {
+  var err = {
+    max: max,
+  };
+
+  if (typeof value == 'string') {
+    if (value.length <= max) return true;
+  } else if (typeof value !== undefined) {
+    if (value <= max) return true;
+  }
+
+  return err;
 };
