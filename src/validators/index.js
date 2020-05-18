@@ -19,6 +19,7 @@ module.exports = {
   not_equals: require('./not_equals'),
   starts_with: require('./starts_with'),
   ends_with: require('./ends_with'),
+  date: require('./date'),
 };
 
 /**
@@ -31,8 +32,7 @@ module.exports = {
  * email - done
  * equals - done
  * not_equals - done
- * date
- * date_format
+ * date - done
  * starts_with - done
  * ends_with - done
  */

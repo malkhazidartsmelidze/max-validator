@@ -21,4 +21,5 @@ module.exports = {
   not_equals: ":name can't be :value",
   starts_with: ':name must start with :prefix',
   ends_with: ':name must end with :suffix',
+  date: ':name must valid date',
 };
