@@ -18,6 +18,9 @@ var result = validator.validate(
     json: '{"asd":1}',
     testip: '192.168.0.1',
     testurl: 'http://google.com?asd=as',
+    equals: '1',
+    testnotequals: '1',
+    teststring: 'THis is test string',
   },
   {
     firstname: 'required|between:5,50',
@@ -38,6 +41,9 @@ var result = validator.validate(
     json: 'required|json',
     testip: 'required|ip',
     testurl: 'required|url',
+    equals: 'nullable|equals:1',
+    testnotequals: 'nullable|not_equals:2',
+    teststring: 'nullable|starts_with:THi|ends_with:string',
   }
 );
 console.log(result);

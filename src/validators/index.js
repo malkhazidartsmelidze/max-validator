@@ -15,6 +15,10 @@ module.exports = {
   json: require('./json'),
   ip: require('./ip'),
   url: require('./url'),
+  equals: require('./equals'),
+  not_equals: require('./not_equals'),
+  starts_with: require('./starts_with'),
+  ends_with: require('./ends_with'),
 };
 
 /**
@@ -25,10 +29,10 @@ module.exports = {
  * ip - done
  * url - done
  * email - done
- * equals
- * not_equals
+ * equals - done
+ * not_equals - done
  * date
  * date_format
- * starts_with
- * ends_with
+ * starts_with - done
+ * ends_with - done
  */

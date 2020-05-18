@@ -17,4 +17,8 @@ module.exports = {
   json: ':name must be valid json',
   ip: ':name must be valid ip adress',
   url: ':name must be valid url',
+  equals: ':name must equal to :value',
+  not_equals: ":name can't be :value",
+  starts_with: ':name must start with :prefix',
+  ends_with: ':name must end with :suffix',
 };
