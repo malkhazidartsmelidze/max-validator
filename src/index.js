@@ -13,6 +13,8 @@ var result = validator.validate(
     name: 'maakho1',
     ald: 'maak1ho-',
     mail: 'darcmelidze1997g.com',
+    in: '1',
+    cantbe: 2,
   },
   {
     firstname: 'required|between:5,50',
@@ -28,6 +30,8 @@ var result = validator.validate(
     name: 'nullable|alpha',
     ald: 'nullable|alpha_dash',
     mail: 'nullable|email',
+    in: 'in_array:1,2,3,4,5,6',
+    cantbe: 'required|not_in:1,2,3,4,5,6',
   }
 );
 console.log(result);

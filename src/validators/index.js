@@ -10,13 +10,15 @@ module.exports = {
   alpha: require('./alpha'),
   email: require('./email'),
   alpha_dash: require('./alpha_dash'),
+  in_array: require('./in_array'),
+  not_in: require('./not_in'),
 };
 
 /**
  * @TODO
- * in_array
- * not_in
- * json
+ * in_array - done
+ * not_in - done
+ * json - json
  * ip
  * url
  * date

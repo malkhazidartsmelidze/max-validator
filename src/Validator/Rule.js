@@ -2,6 +2,10 @@ var Validator = require('./Validator.js');
 
 var dontValidate = ['required', 'string', 'nullable', 'numeric'];
 
+/**
+ * New rules
+ * @param {string} ruleName Rule name
+ */
 function Rule(ruleName) {
   this.name = ruleName;
   if (dontValidate.indexOf(ruleName) === -1) {

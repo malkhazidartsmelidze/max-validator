@@ -191,6 +191,9 @@ Validator.prototype.validate = function (data, scheme) {
   return {
     hasError: hasError,
     errors: errors,
+    isError: function (paramName) {
+      return errors[paramName] !== undefined;
+    },
   };
 };
 
