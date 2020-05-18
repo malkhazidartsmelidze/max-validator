@@ -12,20 +12,23 @@ module.exports = {
   alpha_dash: require('./alpha_dash'),
   in_array: require('./in_array'),
   not_in: require('./not_in'),
+  json: require('./json'),
+  ip: require('./ip'),
+  url: require('./url'),
 };
 
 /**
  * @TODO
  * in_array - done
  * not_in - done
- * json - json
- * ip
- * url
+ * json - done
+ * ip - done
+ * url - done
+ * email - done
+ * equals
+ * not_equals
  * date
  * date_format
- * equals
- * email
  * starts_with
  * ends_with
- * not_equals
  */

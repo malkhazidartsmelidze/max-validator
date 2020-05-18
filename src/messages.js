@@ -14,4 +14,7 @@ module.exports = {
   email: ':name must be correct mail',
   in_array: ':name is not in array :value',
   not_in: ":name can't be :value",
+  json: ':name must be valid json',
+  ip: ':name must be valid ip adress',
+  url: ':name must be valid url',
 };

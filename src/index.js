@@ -15,6 +15,9 @@ var result = validator.validate(
     mail: 'darcmelidze1997g.com',
     in: '1',
     cantbe: 2,
+    json: '{"asd":1}',
+    testip: '192.168.0.1',
+    testurl: 'http://google.com?asd=as',
   },
   {
     firstname: 'required|between:5,50',
@@ -32,6 +35,9 @@ var result = validator.validate(
     mail: 'nullable|email',
     in: 'in_array:1,2,3,4,5,6',
     cantbe: 'required|not_in:1,2,3,4,5,6',
+    json: 'required|json',
+    testip: 'required|ip',
+    testurl: 'required|url',
   }
 );
 console.log(result);
