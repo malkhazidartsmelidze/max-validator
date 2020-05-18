@@ -40,17 +40,6 @@ Rule.prototype.validate = function (rules, value) {
 };
 
 /**
- * Set Name of rule
- * @param {string} name
- * @returns {Rule}
- */
-Rule.prototype.setName = function (name) {
-  this.name = name;
-
-  return this;
-};
-
-/**
  * Set Validator function params
  * @param {array} params
  * @returns {Rule}
@@ -61,6 +50,11 @@ Rule.prototype.setParams = function (params = []) {
   return this;
 };
 
+/**
+ * Parse scheme of rules
+ * @param {object} ruleScheme
+ * @returns {object} Parsed rules
+ */
 Rule.parseScheme = function (ruleScheme) {
   const rules = {};
 
@@ -89,6 +83,11 @@ Rule.parseScheme = function (ruleScheme) {
   return rules;
 };
 
+/**
+ * Parse ruleset and convert it into Rules object
+ * @param {string} ruleSet
+ * @return {object} Parsed ruleSet
+ */
 Rule.parseRuleSet = function (ruleSet) {
   var rules = {};
   var allRules = ruleSet.split(Validator.ruleSeparator);
