@@ -1,4 +1,4 @@
-var validator = require('./Validator/Validator.js');
+var validator = require('./Validator.js');
 
 var result = validator.validate(
   {

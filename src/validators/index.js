@@ -21,18 +21,3 @@ module.exports = {
   ends_with: require('./ends_with'),
   date: require('./date'),
 };
-
-/**
- * @TODO
- * in_array - done
- * not_in - done
- * json - done
- * ip - done
- * url - done
- * email - done
- * equals - done
- * not_equals - done
- * date - done
- * starts_with - done
- * ends_with - done
- */

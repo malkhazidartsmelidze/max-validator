@@ -1,5 +1,5 @@
-var defaultMessages = require('../messages');
-var _validators = require('../validators');
+var defaultMessages = require('./messages');
+var _validators = require('./validators');
 
 function Validator() {
   this.validators = _validators;
