@@ -158,7 +158,7 @@ Validator.prototype.formatMessage = function (name, params, ruleName) {
  * @param {object} scheme Validation scheme
  * @returns {object}
  */
-Validator.prototype.validate = function (data, scheme) {
+Validator.prototype.validate = function (data, scheme, callback) {
   var Rule = require('./Rule');
   var hasError = false;
   var errors = {};
@@ -188,13 +188,19 @@ Validator.prototype.validate = function (data, scheme) {
     }
   }
 
-  return {
+  var data = {
     hasError: hasError,
     errors: errors,
     isError: function (paramName) {
       return errors[paramName] !== undefined;
     },
   };
+
+  if (typeof callback == 'function') {
+    callback(data);
+  }
+
+  return data;
 };
 
 module.exports = new Validator();
