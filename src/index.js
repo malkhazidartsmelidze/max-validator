@@ -47,11 +47,6 @@ var result = validator.validate(
   }
 );
 console.log(result);
-// Rule.parseScheme({
-//   name: 'required|min_length:5|max_length:20',
-// });
-// console.log(Rules);
-// console.log(validator);
 
 module.exports = {
   validator,

@@ -3,6 +3,7 @@ module.exports = function (value) {
 
   try {
     JSON.parse(String(value));
+
     return true;
   } catch (e) {
     return err;
