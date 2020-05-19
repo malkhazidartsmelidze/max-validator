@@ -153,6 +153,43 @@ Validator.prototype.formatMessage = function (name, params, ruleName) {
 };
 
 /**
+ * Format Validation Errors
+ * @param {object} errors Validation Errors
+ * @param {object} failedRules Validation failed rules
+ * @returns {string}
+ */
+Validator.prototype.formatErrors = function (errors, failedRules) {
+  return {
+    hasError: Object.keys(errors).length > 0,
+    errors: errors,
+    isError: function (paramName, ruleName) {
+      if (ruleName == undefined) {
+        return errors[paramName] !== undefined;
+      } else {
+        return (
+          failedRules[paramName] !== undefined && failedRules[paramName].indexOf(ruleName) !== -1
+        );
+      }
+    },
+    getError: function (paramName, getAll = true) {
+      if (!Array.isArray(errors[paramName]) || errors[paramName].length == 0) {
+        return '';
+      }
+
+      return getAll ? errors[paramName].join(',') : errors[paramName][0];
+    },
+  };
+};
+
+/**
+ * Get empty Validator
+ * @return {object}
+ */
+Validator.prototype.getEmpty = function () {
+  return this.validate({}, {});
+};
+
+/**
  * Validate given data with given rules
  * @param {object} data Data to validate
  * @param {object} scheme Validation scheme
@@ -160,7 +197,6 @@ Validator.prototype.formatMessage = function (name, params, ruleName) {
  */
 Validator.prototype.validate = function (data, scheme, callback) {
   var Rule = require('./Rule');
-  var hasError = false;
   var errors = {};
   var failedRules = {};
 
@@ -185,28 +221,16 @@ Validator.prototype.validate = function (data, scheme, callback) {
       if (errors[paramName] === undefined) {
         errors[paramName] = [err];
       } else {
-        errors[paramName].push(err);
+        if (errors[paramName].indexOf(err) === -1) {
+          errors[paramName].push(err);
+        }
       }
 
       failedRules[paramName].push(ruleName);
-
-      hasError = true;
     }
   }
 
-  var data = {
-    hasError: hasError,
-    errors: errors,
-    isError: function (paramName, ruleName) {
-      if (ruleName == undefined) {
-        return errors[paramName] !== undefined;
-      } else {
-        return (
-          failedRules[paramName] !== undefined && failedRules[paramName].indexOf(ruleName) !== -1
-        );
-      }
-    },
-  };
+  var data = this.formatErrors(errors, failedRules);
 
   if (typeof callback == 'function') {
     callback(data);
