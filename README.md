@@ -151,7 +151,7 @@ Validates if given value is valid date
 
 ### Usage
 
-```
+```javascript
 var V = require('max-validate');
 
 var registerRequest = {
