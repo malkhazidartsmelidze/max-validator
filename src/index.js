@@ -43,10 +43,11 @@ var result = validator.validate(
     testurl: 'required|url',
     equals: 'nullable|equals:1',
     testnotequals: 'nullable|not_equals:2',
-    teststring: 'nullable|starts_with:THi|ends_with:string',
+    teststring: 'nullable|starts_with:Ti|ends_with:string',
   }
 );
 console.log(result);
+console.log(result.isError('teststring'));
 
 module.exports = {
   validator,

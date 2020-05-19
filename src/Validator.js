@@ -162,6 +162,7 @@ Validator.prototype.validate = function (data, scheme, callback) {
   var Rule = require('./Rule');
   var hasError = false;
   var errors = {};
+  var failedRules = {};
 
   if (typeof data !== 'object' || typeof scheme !== 'object') {
     throw 'Both data and scheme must be object';
@@ -170,19 +171,24 @@ Validator.prototype.validate = function (data, scheme, callback) {
   var rules = Rule.parseScheme(scheme);
 
   for (paramName in rules) {
+    failedRules[paramName] = [];
+
     for (var i = 0, l = rules[paramName].rules.length; i < l; i++) {
       var rule = rules[paramName].rules[i];
       var result = rule.validate(rules[paramName], data[paramName]);
+      var ruleName = result.rule ? result.rule : rule.name;
 
       if (result === true) continue;
 
-      var err = this.formatMessage(paramName, result, result.rule ? result.rule : rule.name);
+      var err = this.formatMessage(paramName, result, ruleName);
 
       if (errors[paramName] === undefined) {
         errors[paramName] = [err];
       } else {
         errors[paramName].push(err);
       }
+
+      failedRules[paramName].push(ruleName);
 
       hasError = true;
     }
@@ -191,8 +197,14 @@ Validator.prototype.validate = function (data, scheme, callback) {
   var data = {
     hasError: hasError,
     errors: errors,
-    isError: function (paramName) {
-      return errors[paramName] !== undefined;
+    isError: function (paramName, ruleName) {
+      if (ruleName == undefined) {
+        return errors[paramName] !== undefined;
+      } else {
+        return (
+          failedRules[paramName] !== undefined && failedRules[paramName].indexOf(ruleName) !== -1
+        );
+      }
     },
   };
 
