@@ -230,7 +230,7 @@ function registerForm(props){
   };
 
   React.useEffect(() => {
-    const errors = V.validate(formState.values, scheme);
+    const errors = V.validate(formState.values, registerFormScheme);
 
     setFormState((formState) => ({
       ...formState,
