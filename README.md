@@ -10,12 +10,12 @@
 - [License](#license)
 
 ## Installation
-Useing npm package manager to install `max-validate`.
+Useing npm package manager to install `max-validator`.
 
 ```bash
-npm i max-validate --save
+npm i max-validator --save
 #or 
-npm install max-validate --save
+npm install max-validator --save
 ```
 
 ## Aviable Validation Rules
@@ -152,7 +152,7 @@ Validates if given value is valid date
 ### Usage
 
 ```javascript
-var V = require('max-validate');
+var V = require('max-validator');
 
 var registerRequest = {
   name: 'required|string|min:2|max:50',
@@ -194,7 +194,7 @@ result.getError('name', true); // String (joined messages with comma)
 ### Use with react.js
 ```javascript
 import React from 'react'
-import V from 'max-validate'
+import V from 'max-validator'
 
 const registerFormScheme = {
   name: 'required|string|min:2|max:50',
@@ -276,7 +276,7 @@ function registerForm(props){
 
 ### Custom rule without parameter:
 ```javascript
-import V from 'max-validate';
+import V from 'max-validator';
 
 V.extend('custom_rule', function(value){
   var err = {
@@ -293,7 +293,7 @@ V.extend('custom_rule', function(value){
 
 ### Custom rule with one parameter:
 ```javascript
-import V from 'max-validate';
+import V from 'max-validator';
 
 V.extend('custom_rule', function(value, param){
   var err = {
@@ -310,7 +310,7 @@ V.extend('custom_rule', function(value, param){
 
 ### Custom rule with multiple patameters:
 ```javascript
-import V from 'max-validate';
+import V from 'max-validator';
 
 V.extend('custom_rule', function(value, param1, param2, param3, ...rest){
   var err = {
@@ -330,7 +330,7 @@ V.extend('custom_rule', function(value, param1, param2, param3, ...rest){
 ## Messages
 > You can override or add new message
 ```javascript
-import V from 'max-validate';
+import V from 'max-validator';
 
 /* Override default messages */
 V.setMessages({
@@ -345,7 +345,7 @@ V.setDefaultMessage('This is default message');
 
 ## Change rule separators
 ```javascript
-import V from 'max-validate';
+import V from 'max-validator';
 
 V.setRuleParamSeparator('|');
 V.setParamsSeparator(':');
