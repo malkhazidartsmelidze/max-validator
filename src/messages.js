@@ -12,7 +12,7 @@ module.exports = {
   alpha_dash: ':name can only contain letters and dashes',
   alpha: ':name can only contain leters',
   email: ':name must be correct mail',
-  in_array: ':name is not in array :value',
+  in_array: ':name is invalid',
   not_in: ":name can't be :value",
   json: ':name must be valid json',
   ip: ':name must be valid ip adress',

@@ -32,7 +32,7 @@ Rule.prototype.validate = function (rules, value) {
 
   if (rules.isNumeric) {
     value = parseFloat(value);
-  } else if (value.isString) {
+  } else if (rules.isString) {
     value = String(value);
   }
 
