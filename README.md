@@ -16,6 +16,8 @@ Useing npm package manager to install `max-validator`.
 npm i max-validator --save
 #or 
 npm install max-validator --save
+#or
+yarn add max-validator
 ```
 
 ## Aviable Validation Rules
