@@ -10,7 +10,7 @@
 - [License](#license)
 
 ## Installation
-Useing npm package manager to install `max-validator`.
+You can install `max-validator` using npm or yarn package manager:
 
 ```bash
 npm i max-validator --save
@@ -18,6 +18,7 @@ npm i max-validator --save
 npm install max-validator --save
 #or
 yarn add max-validator
+
 ```
 
 ## Aviable Validation Rules

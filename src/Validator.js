@@ -215,8 +215,11 @@ Validator.prototype.validate = function (data, scheme, callback) {
       var ruleName = result.rule ? result.rule : rule.name;
 
       if (result === true) continue;
-
-      var err = this.formatMessage(paramName, result, ruleName);
+      if (typeof result == 'string') {
+        var err = result;
+      } else {
+        var err = this.formatMessage(paramName, result, ruleName);
+      }
 
       if (errors[paramName] === undefined) {
         errors[paramName] = [err];

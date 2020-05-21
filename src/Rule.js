@@ -4,13 +4,20 @@ var dontValidate = ['required', 'string', 'nullable', 'numeric'];
 
 /**
  * New rules
- * @param {string} ruleName Rule name
+ * @param {string} rule Rule name
  */
-function Rule(ruleName) {
-  this.name = ruleName;
-  if (dontValidate.indexOf(ruleName) === -1) {
-    this.validator = Validator.getValidator(this.name);
+function Rule(rule) {
+  if (typeof rule == 'string') {
+    this.name = rule;
+
+    if (dontValidate.indexOf(rule) === -1) {
+      this.validator = Validator.getValidator(this.name);
+    }
+  } else if (typeof rule == 'function') {
+    this.name = rule.name || 'default';
+    this.validator = rule;
   }
+
   this.params = [];
 }
 
@@ -59,9 +66,19 @@ Rule.parseScheme = function (ruleScheme) {
   const rules = {};
 
   for (name in ruleScheme) {
-    if (typeof ruleScheme[name] !== 'string') throw 'Validation rules must be string';
-    var _rules = Rule.parseRuleSet(ruleScheme[name]);
+    var _ruleSet = ruleScheme[name];
+    var _rules = {};
 
+    if (typeof _ruleSet == 'string') {
+      _rules = Rule.parseStringRules(_ruleSet);
+    } else if (Array.isArray(_ruleSet)) {
+      _rules = Rule.parseArrayRules(_ruleSet);
+    } else if (typeof _ruleSet == 'object') {
+      _rules = Rule.parseRulesObject(_ruleSet);
+    } else {
+      throw 'Invalid rules for ' + name;
+    }
+    console.log(_rules);
     var isRequired = _rules.required !== undefined;
     var isString = _rules.string !== undefined;
     var isNumeric = _rules.numeric !== undefined;
@@ -84,11 +101,60 @@ Rule.parseScheme = function (ruleScheme) {
 };
 
 /**
- * Parse ruleset and convert it into Rules object
+ * If validation rules is array: ['required', 'max:20', someFunction ...]
+ * @param {Array} ruleSet
+ * @returns {Object}
+ */
+Rule.parseArrayRules = function (ruleSet) {
+  var rules = {};
+  var i = 100;
+  ruleSet.map(function (rule) {
+    if (typeof rule == 'string') {
+      var parsedRule = Rule.parseStringRules(rule);
+      Object.assign(rules, parsedRule);
+    } else if (typeof rule == 'function') {
+      var _ruleName = rule.name.length > 0 ? rule.name : i++;
+      var _rule = new Rule(rule);
+
+      rules[_ruleName] = _rule;
+    }
+  });
+
+  return rules;
+};
+
+/**
+ * If validation rules is object: {required: true, in_array: [1, 2, 34, 5] ... , custom: function(){}}
+ * @param {Array} ruleSet
+ * @returns {Object}
+ */
+Rule.parseRulesObject = function (ruleSet) {
+  var rules = {};
+  var i = 100;
+  Object.keys(ruleSet).map(function (ruleName) {
+    var ruleParam = ruleSet[ruleName];
+
+    if (typeof ruleParam == 'function') {
+      var _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
+      var _rule = new Rule(ruleParam);
+
+      rules[_ruleName] = _rule;
+    } else {
+      var params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
+      var _rule = new Rule(ruleName).setParams(params);
+      rules[ruleName] = _rule;
+    }
+  });
+
+  return rules;
+};
+
+/**
+ * Parse String rule set
  * @param {string} ruleSet
  * @return {object} Parsed ruleSet
  */
-Rule.parseRuleSet = function (ruleSet) {
+Rule.parseStringRules = function (ruleSet) {
   var rules = {};
   var allRules = ruleSet.split(Validator.ruleSeparator);
 
