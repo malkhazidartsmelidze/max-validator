@@ -1,9 +1,9 @@
 # Documentation
 
 - [Instalation](#instalation)
-- [Aviable Validation Rules](#aviable-validation-rules)
 - [Usage](#usage)
-- [Writing Own Rules](#writing-own-rules)
+- [Extending Validator](#extending-validator)
+- [Aviable Validation Rules](#aviable-validation-rules)
 - [Use With React.js](#use-with-react.js)
 - [Messages](#messages)
 - [Change rule separators](#change-rule-separators)
@@ -28,29 +28,50 @@ yarn add max-validator
 ```javascript
 var V = require('max-validator');
 
-var registerRequest = {
+// validate if email is unique
+var checkEmail = function (value) {
+  if (isUniqueEmail(value)) {
+    return true;
+  }
+  return 'This email is already used';
+};
+
+var registerRequestScheme = {
   name: 'required|string|min:2|max:50',
   lastname: 'required|string|min:2|max:50',
   gender: 'required|in_array:male,female',
   accept_policy: 'checked',
-  email: ['required', 'email', 'ends_width:gmail.com'],
+  email: [ 'required', 'email', 'ends_with:gmail.com', checkEmail,
+    function (value) {
+      // Validate with inline function
+      if (isValidEmail(value)) {
+        return true;
+      }
+      return 'Provided email is invalid';
+    },
+  ],
   address: {
     required: true,
     min: 5,
     max: 50,
-    contains: 'st,str,street,#',
+    contains_one: ['st', 'str', 'street', '#'],
+    mycustom: function (value) {
+      if (value !== 'foo') {
+        return 'Your address is incorrect';
+      }
+      return true;
+    },
   },
 };
 
-var data = {
-  name: 'Malkhazi',
-  lastname: 'Dartsmeldize',
-  email: 'malkhazidartsmelidze@gmail.com',
-  gender: 'male',
-  accept_policy: 'true',
-};
-
-var result = V.validate(data, registerRequest);
+var result = Validator.validate({
+    name: 'Malkhazi',
+    lastname: 'Dartsmeldize',
+    email: 'malkhazidartsmelidze@gmail.com',
+    gender: 'male',
+    accept_policy: 'true',
+    address: 'Tbilisi, Georgia',
+}, registerRequestScheme );
 
 // Get if validate returned error
 result.hasError; // Boolean
@@ -63,12 +84,60 @@ result.isError('name'); // Boolean
 
 // Get if given field has error of given validation rule
 result.isError('name', 'max'); // Boolean
+result.isError('name', 'mycustom'); // Boolean
+// Note: you cant get whether inline function passed validation or not
 
 // Get first validation error message of field
 result.getError('name'); // String
 
 // Get all validation error messages of field
 result.getError('name', true); // String (joined messages with comma)
+```
+
+
+## Extending Validator
+> Validator function must return `true` to make data valid
+```javascript
+import V from 'max-validator';
+
+V.extend(
+  'custom_rule',
+  function (value, param1, param2, ...rest) { // You can pass as many parameter as you want or use ...spread operator to get array as parameter
+    var err = {
+      value: value,
+    };
+    if (value !== 'condition') {
+      return true;
+    } else {
+      return err;
+    }
+  },
+  'Default Error Message: :name cant be :value'
+);
+// usage: {name: 'custom_rule:val1,val2|required'}
+```
+
+## Validation Structure
+```javascript
+V.validate({
+  dataName: 'value here'
+}, {
+  dataName: 'required|string|in_array:val1,val2',
+  withArray: ['required','string', 'in_array:val1,val2'],
+  withObject: {
+    required: true, 
+    string: true, 
+    in_array: ['val1','val2'],
+    customRule: function(value){
+      // Custom condition here
+      if(/* isvalid */){
+        return true
+      } else {
+        return 'This is error string';
+      }
+    }
+  }
+})
 ```
 
 ## Aviable Validation Rules
@@ -96,6 +165,8 @@ result.getError('name', true); // String (joined messages with comma)
 - [url](#url)
 - [equals](#equals)
 - [not_equals](#not_equals)
+- [contains_one](#contains_one)
+- [contains_all](#contains_all)
 - [starts_with](#starts_with)
 - [ends_with](#ends_with)
 - [date](#date)
@@ -278,6 +349,22 @@ Validates if given value don't equals to given parameter
 
 ---
 
+### contains_one `(|contains_one:foo,bar,2|)`
+
+Validates if given value don't contains one of parameter
+
+> **Parameter must contain "Value"**
+
+---
+
+### contains_all `(|contains_all:foo,bar,2|)`
+
+Validates if given value don't contains every given parameter
+
+> **Parameter must contain "Value"**
+
+---
+
 ### starts_with `(|starts_with:foo|)`
 
 Validates if given value starts with given prefix
@@ -407,78 +494,6 @@ function registerForm(props) {
     </form>
   );
 }
-```
-
-## Writing Own Rules (extending)
-
-> Validator function must return `true` to make data valid
-
-### Custom rule without parameter:
-
-```javascript
-import V from 'max-validator';
-
-V.extend(
-  'custom_rule',
-  function (value) {
-    var err = {
-      value: value,
-    };
-    if (value !== 'condition') {
-      return true;
-    } else {
-      return err;
-    }
-  },
-  'Default Error Message: :name cant be :value'
-);
-// usage: {name: 'custom_rule|required'}
-```
-
-### Custom rule with one parameter:
-
-```javascript
-import V from 'max-validator';
-
-V.extend(
-  'custom_rule',
-  function (value, param) {
-    var err = {
-      value: value,
-    };
-    if (value !== param) {
-      return true;
-    } else {
-      return err;
-    }
-  },
-  'Default Error Message: :name cant be :value'
-);
-// usage: {name: 'custom_rule:20|required'}
-```
-
-### Custom rule with multiple patameters:
-
-```javascript
-import V from 'max-validator';
-
-V.extend(
-  'custom_rule',
-  function (value, param1, param2, param3, ...rest) {
-    var err = {
-      value: value,
-      param1: param1,
-      param2: param2,
-    };
-    if (param1 && param2 && value) {
-      return true;
-    } else {
-      return err;
-    }
-  },
-  'Default Error Message: :name cant be :param1 or :param2'
-);
-// usage: {name: 'custom_rule:20,22,34,56,44,foo,bar|min:40|required'}
 ```
 
 ## Messages

@@ -78,7 +78,7 @@ Rule.parseScheme = function (ruleScheme) {
     } else {
       throw 'Invalid rules for ' + name;
     }
-    console.log(_rules);
+
     var isRequired = _rules.required !== undefined;
     var isString = _rules.string !== undefined;
     var isNumber = _rules.number !== undefined;
