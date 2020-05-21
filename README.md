@@ -38,12 +38,13 @@ var registerRequest = {
     required: true,
     min: 5,
     max: 50,
+    contains: 'st,str,street,#',
   },
 };
 
 var data = {
   name: 'Malkhazi',
-  lastname: [1, 2, 34, 'smelid'],
+  lastname: 'Dartsmeldize',
   email: 'malkhazidartsmelidze@gmail.com',
   gender: 'male',
   accept_policy: 'true',

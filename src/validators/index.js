@@ -19,7 +19,8 @@ module.exports = {
   equals: require('./equals'),
   not_equals: require('./not_equals'),
   starts_with: require('./starts_with'),
-  contains: require('./contains'),
+  contains_one: require('./contains_one'),
+  contains_all: require('./contains_all'),
   ends_with: require('./ends_with'),
   date: require('./date'),
 };

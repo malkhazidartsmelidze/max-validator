@@ -15,7 +15,7 @@ Validator.validate(
   },
   {
     name: 'required|string|min:30',
-    lastname: 'required|string',
+    lastname: 'required|string|contains_one:k',
     age: [
       'required',
       'min:30',
