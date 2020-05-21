@@ -19,6 +19,7 @@ module.exports = {
   equals: require('./equals'),
   not_equals: require('./not_equals'),
   starts_with: require('./starts_with'),
+  contains: require('./contains'),
   ends_with: require('./ends_with'),
   date: require('./date'),
 };
