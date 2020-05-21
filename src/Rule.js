@@ -9,12 +9,14 @@ var dontValidate = ['required', 'string', 'nullable', 'number'];
 function Rule(rule) {
   if (typeof rule == 'string') {
     this.name = rule;
+    this.isInlineFunction = false;
 
     if (dontValidate.indexOf(rule) === -1) {
       this.validator = Validator.getValidator(this.name);
     }
   } else if (typeof rule == 'function') {
     this.name = rule.name || 'default';
+    this.isInlineFunction = true;
     this.validator = rule;
   }
 
@@ -26,7 +28,7 @@ function Rule(rule) {
  * @param {any} value
  * @returns {Rule}
  */
-Rule.prototype.validate = function (rules, value) {
+Rule.prototype.validate = function (rules, value, data) {
   if (value == undefined || value == null || value == '') {
     if (rules.isRequired) {
       return {
@@ -43,7 +45,11 @@ Rule.prototype.validate = function (rules, value) {
     value = String(value);
   }
 
-  return this.validator(value, ...this.params);
+  if (this.isInlineFunction) {
+    return this.validator(value, data);
+  } else {
+    return this.validator(value, ...this.params);
+  }
 };
 
 /**
@@ -109,6 +115,8 @@ Rule.parseArrayRules = function (ruleSet) {
   var rules = {};
   var i = 100;
   ruleSet.map(function (rule) {
+    if (rule == null || rule == '') return;
+
     if (typeof rule == 'string') {
       var parsedRule = Rule.parseStringRules(rule);
       Object.assign(rules, parsedRule);
@@ -158,19 +166,23 @@ Rule.parseStringRules = function (ruleSet) {
   var rules = {};
   var allRules = ruleSet.split(Validator.ruleSeparator);
 
-  allRules.map(function (r) {
-    var _ruleParams = r.split(Validator.ruleParamSeparator);
-    var _ruleName = _ruleParams[0].trim();
-    var rule = new Rule(_ruleName);
+  allRules
+    .filter(function (val) {
+      return val !== '';
+    })
+    .map(function (r) {
+      var _ruleParams = r.split(Validator.ruleParamSeparator);
+      var _ruleName = _ruleParams[0].trim();
+      var rule = new Rule(_ruleName);
 
-    var _params = _ruleParams[1];
-    var _function_params = _params !== undefined ? _params.split(Validator.paramsSeparator) : [];
-    rule.setParams(_function_params);
+      var _params = _ruleParams[1];
+      var _function_params = _params !== undefined ? _params.split(Validator.paramsSeparator) : [];
+      rule.setParams(_function_params);
 
-    rules[_ruleName] = rule;
+      rules[_ruleName] = rule;
 
-    return null;
-  });
+      return null;
+    });
 
   return rules;
 };

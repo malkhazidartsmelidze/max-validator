@@ -211,7 +211,7 @@ Validator.prototype.validate = function (data, scheme, callback) {
 
     for (var i = 0, l = rules[paramName].rules.length; i < l; i++) {
       var rule = rules[paramName].rules[i];
-      var result = rule.validate(rules[paramName], data[paramName]);
+      var result = rule.validate(rules[paramName], data[paramName], data);
       var ruleName = result.rule ? result.rule : rule.name;
 
       if (result === true) continue;
