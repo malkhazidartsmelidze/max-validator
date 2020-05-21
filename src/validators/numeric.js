@@ -3,7 +3,7 @@ module.exports = function (value) {
     value: value,
   };
 
-  if (/^[A-Za-z0-9]+$/.test(value)) {
+  if (/^\d+$/.test(value)) {
     return true;
   }
 

@@ -10,6 +10,8 @@ Validator.validate(
     lastname: 'Dartsmelidze',
     age: 22,
     gender: 'male',
+    gg: 'asdf1',
+    aa: 'asdf',
   },
   {
     name: 'required|string|min:30',
@@ -19,10 +21,10 @@ Validator.validate(
       'min:30',
       checkName,
       function (value) {
-        return value;
+        return String(value);
       },
       function (value) {
-        return value;
+        return String(value);
       },
     ],
     gender: {
@@ -35,6 +37,8 @@ Validator.validate(
       in_array: [1, 2, 3, 4],
       equals: 'male',
     },
+    gg: 'required|number',
+    aa: 'required|alpha_numeric',
   },
   function (errors) {
     console.log(errors.errors);

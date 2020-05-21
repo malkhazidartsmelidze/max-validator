@@ -6,6 +6,7 @@ module.exports = {
   object: require('./object'),
   array: require('./array'),
   boolean: require('./boolean'),
+  numeric: require('./numeric'),
   alpha_numeric: require('./alpha_numeric'),
   alpha: require('./alpha'),
   email: require('./email'),

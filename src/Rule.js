@@ -1,6 +1,6 @@
 var Validator = require('./Validator.js');
 
-var dontValidate = ['required', 'string', 'nullable', 'numeric'];
+var dontValidate = ['required', 'string', 'nullable', 'number'];
 
 /**
  * New rules
@@ -37,7 +37,7 @@ Rule.prototype.validate = function (rules, value) {
     }
   }
 
-  if (rules.isNumeric) {
+  if (rules.isNumber) {
     value = parseFloat(value);
   } else if (rules.isString) {
     value = String(value);
@@ -81,7 +81,7 @@ Rule.parseScheme = function (ruleScheme) {
     console.log(_rules);
     var isRequired = _rules.required !== undefined;
     var isString = _rules.string !== undefined;
-    var isNumeric = _rules.numeric !== undefined;
+    var isNumber = _rules.number !== undefined;
     var isNullable = _rules.nullable !== undefined;
 
     for (var i = 0; i < dontValidate.length; i++) {
@@ -92,7 +92,7 @@ Rule.parseScheme = function (ruleScheme) {
       rules: Object.values(_rules),
       isRequired: isRequired,
       isString: isString,
-      isNumeric: isNumeric,
+      isNumber: isNumber,
       isNullable: isNullable,
     };
   }
@@ -124,7 +124,7 @@ Rule.parseArrayRules = function (ruleSet) {
 };
 
 /**
- * If validation rules is object: {required: true, in_array: [1, 2, 34, 5] ... , custom: function(){}}
+ * If validation rules is object: {required: true, in_array: [1, 2, 3, 4, 5] ... , custom: function(){}}
  * @param {Array} ruleSet
  * @returns {Object}
  */
