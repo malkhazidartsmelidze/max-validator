@@ -180,8 +180,6 @@ Rule.parseStringRules = function (ruleSet) {
       rule.setParams(_function_params);
 
       rules[_ruleName] = rule;
-
-      return null;
     });
 
   return rules;
