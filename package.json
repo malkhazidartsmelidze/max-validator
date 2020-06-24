@@ -26,5 +26,9 @@
       "not op_mini all"
     ]
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "tinyify": "^2.5.2",
+    "browserify": "^16.5.1"
+  }
 }
