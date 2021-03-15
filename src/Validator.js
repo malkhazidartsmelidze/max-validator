@@ -206,7 +206,7 @@ Validator.prototype.validate = function (data, scheme, callback) {
 
   var rules = Rule.parseScheme(scheme);
 
-  for (paramName in rules) {
+  for (var paramName in rules) {
     failedRules[paramName] = [];
 
     for (var i = 0, l = rules[paramName].rules.length; i < l; i++) {
