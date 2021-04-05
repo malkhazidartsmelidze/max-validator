@@ -80,7 +80,7 @@
           if ('object' != typeof t || 'object' != typeof e)
             throw 'Both data and scheme must be object';
           var o = a.parseScheme(e);
-          for (paramName in o) {
+          for (var paramName in o) {
             s[paramName] = [];
             for (var u = 0, l = o[paramName].rules.length; u < l; u++) {
               var f = o[paramName].rules[u],
@@ -127,7 +127,7 @@
         }),
         (i.parseScheme = function (t) {
           const e = {};
-          for (name in t) {
+          for (var name in t) {
             var r = t[name],
               n = {};
             if ('string' == typeof r) n = i.parseStringRules(r);

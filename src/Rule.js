@@ -71,7 +71,7 @@ Rule.prototype.setParams = function (params = []) {
 Rule.parseScheme = function (ruleScheme) {
   const rules = {};
 
-  for (name in ruleScheme) {
+  for (var name in ruleScheme) {
     var _ruleSet = ruleScheme[name];
     var _rules = {};
 
