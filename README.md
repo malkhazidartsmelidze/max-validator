@@ -41,7 +41,11 @@ var registerRequestScheme = {
   lastname: 'required|string|min:2|max:50',
   gender: 'required|in_array:male,female',
   accept_policy: 'checked',
-  email: [ 'required', 'email', 'ends_with:gmail.com', checkEmail,
+  email: [
+    'required',
+    'email',
+    'ends_with:gmail.com',
+    checkEmail,
     function (value) {
       // Validate with inline function
       if (isValidEmail(value)) {
@@ -64,14 +68,17 @@ var registerRequestScheme = {
   },
 };
 
-var result = Validator.validate({
+var result = Validator.validate(
+  {
     name: 'Malkhazi',
     lastname: 'Dartsmeldize',
     email: 'malkhazidartsmelidze@gmail.com',
     gender: 'male',
     accept_policy: 'true',
     address: 'Tbilisi, Georgia',
-}, registerRequestScheme );
+  },
+  registerRequestScheme
+);
 
 // Get if validate returned error
 result.hasError; // Boolean
@@ -94,15 +101,17 @@ result.getError('name'); // String
 result.getError('name', true); // String (joined messages with comma)
 ```
 
-
 ## Extending Validator
+
 > Validator function must return `true` to make data valid
+
 ```javascript
 import V from 'max-validator';
 
 V.extend(
   'custom_rule',
-  function (value, param1, param2, ...rest) { // You can pass as many parameter as you want or use ...spread operator to get array as parameter
+  function (value, param1, param2, ...rest) {
+    // You can pass as many parameter as you want or use ...spread operator to get array as parameter
     var err = {
       value: value,
     };
@@ -118,6 +127,7 @@ V.extend(
 ```
 
 ## Validation Structure
+
 ```javascript
 V.validate({
   dataName: 'value here'
@@ -125,8 +135,8 @@ V.validate({
   dataName: 'required|string|in_array:val1,val2',
   withArray: ['required','string', 'in_array:val1,val2'],
   withObject: {
-    required: true, 
-    string: true, 
+    required: true,
+    string: true,
     in_array: ['val1','val2'],
     customRule: function(value){
       // Custom condition here
@@ -171,221 +181,201 @@ V.validate({
 - [ends_with](#ends_with)
 - [date](#date)
 
-### required
-
-Validates if given values is `undefined` `null` or empty string.
-
-> **Parameter is required**
-
----
-
-### string
-
-Tells validator to pass value in validator function as string
-
----
-
-### number `(|number|)`
-
-Tells validator to pass value in validator function as number
-
----
-
-### nullable `(|nullable|)`
-
-Rule for parameter that is not required
-
----
-
-### min `(|min:20|)`
-
-Returns error if given value is greater than given parameter, if value is not numeric compares string length
-
-> **Parameter cant be less than Value**
-
----
-
-### max `(|max:20|)`
-
-Returns error if given value is less than given parameter, if value is not numeric compares string length
-
-> **Parameter cant be greater than Value**
-
----
-
-### between `(|between:20,40|)`
-
-Returns error if given value is between given parameter, if value is not numeric compares string length
-
-> **Parameter must be between From and To**
-
----
-
-### checked `(|checked|)`
-
-Validates if checkbox is checked. Valid values: `'on', 1, 'true', true`
-
-> **Parameter must be checked**
-
----
-
-### object `(|object|)`
-
-Validates if given value is object
-
-> **Parameter must be object**
-
----
-
-### array `(|array|)`
-
-Validates if given value is array
-
-> **Parameter must be array**
-
----
-
-### boolean `(|boolean|)`
-
-Validates if given value is boolean
-
-> **Parameter must be boolean**
-
----
-
-### json `(|json|)`
-
-Validates if given value is valid json
-
-> **Parameter must be valid json**
-
----
-
-### alpha_numeric `(|alpha_numeric|)`
-
-Validates if given value contains only digits
-
-> **Parameter can only contain numbers**
-
----
-
-### numeric `(|numeric|)`
-
-Validates if given value contains only digits and letters
-
-> **Parameter can only contain digits and letters**
-
----
-
-### alpha `(|alpha|)`
-
-Validates if given value contains only letters
-
-> **Parameter can only contain leters**
-
----
-
-### alpha_dash `(|alpha_dash|)`
-
-Validates if given value contains only letters and dashes
-
-> **Parameter can only contain letters and dashes**
-
----
-
-### email `(|email|)`
-
-Validates if given value is correct email
-
-> **Parameter must be correct e-mail**
-
----
-
-### in_array `(|in_array:1,2,a,b,c|)`
-
-Validates if given value is in given array
-
-> **Parameter is invalid**
-
----
-
-### not_in `(|not_in:1,2,a,b,c|)`
-
-Validates if given value is not in given array
-
-> **Parameter cant be Value**
-
----
-
-### ip `(|ip|)`
-
-Validates if given value is valid IP Address
-
-> **Parameter must be valid ip adress**
-
----
-
-### url `(|url|)`
-
-Validates if given value is valid URl
-
-> **Parameter must be valid URL**
-
----
-
-### equals `(|equals:foo|)`
-
-Validates if given value equals to given parameter
-
-> **Parameter must equal to Value**
-
----
-
-### not_equals `(|not_equals:bar|)`
-
-Validates if given value don't equals to given parameter
-
-> **Parameter can't be Value**
-
----
-
-### contains_one `(|contains_one:foo,bar,2|)`
-
-Validates if given value don't contains one of parameter
-
-> **Parameter must contain "Value"**
-
----
-
-### contains_all `(|contains_all:foo,bar,2|)`
-
-Validates if given value don't contains every given parameter
-
-> **Parameter must contain "Value"**
-
----
-
-### starts_with `(|starts_with:foo|)`
-
-Validates if given value starts with given prefix
-
-> **Parameter must start with Value**
-
----
-
-### ends_with `(|ends_with:foo|)`
-
-Validates if given value ends with given suffix
-
-> **Parameter must end with Value**
-
----
-
-### date `('date')`
-
-Validates if given value is valid date
-
-> **Parameter must be valid date**
+```javascript
+/**
+ * Validates if given values is `undefined` `null` or empty string.
+ * @message Parameter is required
+ * @example ...'|required'
+ */
+'required';
+
+/**
+ * Tells validator to pass value in validator function as string
+ * @example ...'|string'
+ */
+'string';
+
+/**
+ * Tells validator to pass value in validator function as number
+ * @example ...'|number'
+ */
+'number';
+
+/**
+ * Rule for parameter that is not required
+ * @example ...'|nullable'
+ */
+'nullable';
+
+/**
+ * Returns error if given value is greater than given parameter, if value is not numeric compares string length
+ * @message Parameter cant be less than Value
+ * @example ...'|min:20|'
+ */
+'min';
+
+/**
+ * Returns error if given value is less than given parameter, if value is not numeric compares string length
+ * @message Parameter cant be greater than Value
+ * @example ...'|max:20|'
+ */
+'max';
+
+/**
+ * Returns error if given value is between given parameter, if value is not numeric compares string length
+ * @message Parameter must be between From and To
+ * @example ...'|between:20,40|'
+ */
+'between';
+
+/**
+ * Validates if checkbox is checked. Valid values: `'on', 1, 'true', true`
+ * @message Parameter must be checked
+ * @example ...'|checked|'
+ */
+'checked';
+
+/**
+ * Validates if given value is object
+ * @message Parameter must be object
+ * @example ...'|object|'
+ */
+'object';
+
+/**
+ * Validates if given value is array
+ * @message Parameter must be array
+ * @example ...'|array|'
+ */
+'array';
+
+/**
+ * Validates if given value is boolean
+ * @message Parameter must be boolean
+ * @example ...'|boolean|'
+ */
+'boolean';
+
+/**
+ * Validates if given value is valid json
+ * @message Parameter must be valid json
+ * @example ...'|json|'
+ */
+'json';
+
+/**
+ * Validates if given value contains only digits and letters
+ * @message Parameter can only contain digits and letters
+ * @example ...'|alpha_numeric|'
+ */
+'alpha_numeric';
+
+/**
+ * Validates if given value contains only digits
+ * @message Parameter can only contain numbers
+ * @example ...'|numeric|'
+ */
+'numeric';
+
+/**
+ * Validates if given value contains only letters
+ * @message Parameter can only contain leters
+ * @example ...'|alpha|'
+ */
+'alpha';
+
+/**
+ * Validates if given value contains only letters and dashes
+ * @message Parameter can only contain letters and dashes
+ * @example ...'|alpha_dash|'
+ */
+'alpha_dash';
+
+/**
+ * Validates if given value is correct email
+ * @message Parameter must be correct e-mail
+ * @example ...'|email|'
+ */
+'email';
+
+/**
+ * Validates if given value is in given array
+ * @message Parameter is invalid
+ * @example ...'|in_array:1,2,a,b,c|'
+ */
+'in_array';
+
+/**
+ * Validates if given value is not in given array
+ * @message Parameter cant be Value
+ * @example ...'|not_in:1,2,a,b,c|'
+ */
+'not_in';
+
+/**
+ * Validates if given value is valid IP Address
+ * @message Parameter must be valid ip adress
+ * @example ...'|ip|'
+ */
+'ip';
+
+/**
+ * Validates if given value is valid URl
+ * @message Parameter must be valid URL
+ * @example ...'|url|'
+ */
+'url';
+
+/**
+ * Validates if given value equals to given parameter
+ * @message Parameter must equal to Value
+ * @example ...'|equals:foo|'
+ */
+'equals';
+
+/**
+ * Validates if given value don't equals to given parameter
+ * @message Parameter can't be Value
+ * @example ...'|not_equals:foo|'
+ */
+'not_equals';
+
+/**
+ * Validates if given value don't contains one of parameter
+ * @message Parameter must contain "Value"
+ * @example ...'|contains_one:foo,bar,2|'
+ */
+'contains_one';
+
+/**
+ * Validates if given value don't contains every given parameter
+ * @message Parameter must contain "Value"
+ * @example ...'|contains_all:foo,bar,2|'
+ */
+'contains_all';
+
+/**
+ * Validates if given value starts with given prefix
+ * @message Parameter must start with Value
+ * @example ...'|starts_with:foo|'
+ */
+'starts_with';
+
+/**
+ * Validates if given value ends with given suffix
+ * @message Parameter must end with Value
+ * @example ...'|ends_with:foo|'
+ */
+'ends_with';
+
+/**
+ * Validates if given value is valid date
+ * @message Parameter must be valid date
+ * @example ...'|date|'
+ */
+'date';
+
+```
 
 ---
 
