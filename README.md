@@ -152,35 +152,6 @@ V.validate({
 
 ## Aviable Validation Rules
 
-- [required](#required)
-- [string](#string)
-- [nullable](#nullable)
-- [mumber](#mumber)
-- [min](#min)
-- [max](#max)
-- [between](#between)
-- [checked](#checked)
-- [object](#object)
-- [array](#array)
-- [boolean](#boolean)
-- [numeric](#numeric)
-- [alpha_numeric](#alpha_numeric)
-- [alpha](#alpha)
-- [email](#email)
-- [alpha_dash](#alpha_dash)
-- [in_array](#in_array)
-- [not_in](#not_in)
-- [json](#json)
-- [ip](#ip)
-- [url](#url)
-- [equals](#equals)
-- [not_equals](#not_equals)
-- [contains_one](#contains_one)
-- [contains_all](#contains_all)
-- [starts_with](#starts_with)
-- [ends_with](#ends_with)
-- [date](#date)
-
 ```javascript
 /**
  * Validates if given values is `undefined` `null` or empty string.
