@@ -1,4 +1,12 @@
-export default {
+/**
+ * @type {string}
+ */
+export let defaultMessage = 'Incorrect Value';
+
+/**
+ * @type {*}
+ */
+export let messages = {
   required: ':name is required',
   min: ':name cant be less than :min',
   max: ':name cant be greater than :max',
@@ -25,3 +33,25 @@ export default {
   ends_with: ':name must end with :suffix',
   date: ':name must valid date',
 };
+
+/**
+ * @param {object} m
+ */
+export function setMessages(m) {
+  if (typeof m !== 'object') {
+    throw 'Messages must be object';
+  }
+
+  messages = { ...messages, ...m };
+}
+
+/**
+ * @param {string} msg
+ */
+export function setDefaultMessage(msg) {
+  if (typeof msg !== 'object') {
+    throw 'Messages must be object';
+  }
+
+  defaultMessage = msg;
+}

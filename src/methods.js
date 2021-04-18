@@ -1,7 +1,7 @@
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
-export default {
+export let methods = {
   /**
    * @param value
    * @return {boolean|{value}}
@@ -260,3 +260,23 @@ export default {
     }
   },
 };
+
+/**
+ * @param {string} name
+ * @returns {Rule}
+ */
+export function getValidationMethod(name) {
+  if (typeof methods[name] !== 'function') {
+    throw 'Validation method for ' + name + ' does not exists';
+  }
+
+  return methods[name];
+}
+
+/**
+ * @param {string} name
+ * @returns {boolean}
+ */
+export function exists(name) {
+  return typeof methods[name] === 'function';
+}

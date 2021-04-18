@@ -1,11 +1,52 @@
-import {
-  getValidator,
-  ruleSeparator,
-  ruleParamSeparator,
-  paramsSeparator,
-} from './Validator';
+import { getValidationMethod as getValidator } from './methods';
 
 const dontValidate = ['required', 'string', 'nullable', 'number'];
+
+export let ruleSeparator = '|';
+export let ruleParamSeparator = ':';
+export let paramsSeparator = ',';
+
+/**
+ * Override default rule separator
+ * @param {string} separator
+ * @returns {Validator}
+ */
+export function setRuleSeparator(separator) {
+  if (typeof separator !== 'string') {
+    throw 'Separator must be string';
+  }
+
+  ruleSeparator = separator;
+  return this;
+}
+
+/**
+ * Override default rule-params separator
+ * @param {string} separator
+ * @returns {Validator}
+ */
+export function setRuleParamSeparator(separator) {
+  if (typeof separator !== 'string') {
+    throw 'Separator must be string';
+  }
+
+  ruleParamSeparator = separator;
+  return this;
+}
+
+/**
+ * Override default params separator
+ * @param {string} separator
+ * @returns {Validator}
+ */
+export function setParamsSeparator(separator) {
+  if (typeof separator !== 'string') {
+    throw 'Separator must be string';
+  }
+
+  paramsSeparator = separator;
+  return this;
+}
 
 /**
  * New rules

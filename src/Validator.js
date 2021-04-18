@@ -1,82 +1,13 @@
-import defaultMessages from './messages';
-import validators from './validators';
+import { messages, defaultMessage, setMessages } from './messages';
+import { methods as validators } from './methods';
 import { parseScheme } from './Rule';
 
-let messages = defaultMessages;
-export let ruleSeparator = '|';
-export let ruleParamSeparator = ':';
-export let paramsSeparator = ',';
-let defaultMessage = 'Incorrect Value';
-
-/**
- * Override default messages with custom messages
- * @param {object} msgs
- * @returns {Validator}
- */
-export function setMessages(msgs) {
-  if (typeof msgs !== 'object') {
-    throw 'Messages must be object';
-  }
-
-  messages = Object.assign(messages, msgs);
-  return this;
-}
-
-/**
- * Set Default Message of invalid parameter
- * @param {string} msg
- * @returns {Validator}
- */
-export function setDefaultMessage(msg) {
-  if (typeof msg !== 'object') {
-    throw 'Messages must be object';
-  }
-
-  defaultMessage = msg;
-  return this;
-}
-
-/**
- * Override default rule separator
- * @param {string} separator
- * @returns {Validator}
- */
-export function setRuleSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
-
-  ruleSeparator = separator;
-  return this;
-}
-
-/**
- * Override default rule-params separator
- * @param {string} separator
- * @returns {Validator}
- */
-export function setRuleParamSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
-
-  ruleParamSeparator = separator;
-  return this;
-}
-
-/**
- * Override default params separator
- * @param {string} separator
- * @returns {Validator}
- */
-export function setParamsSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
-
-  paramsSeparator = separator;
-  return this;
-}
+export { setMessages, setDefaultMessage } from './messages';
+export {
+  setRuleSeparator,
+  setRuleParamSeparator,
+  setParamsSeparator,
+} from './Rule';
 
 /**
  * Extend validation Rule
@@ -97,33 +28,10 @@ export function extend(ruleName, validator, message = null) {
   validators[ruleName] = validator;
 
   if (message !== null) {
-    setMessages({
-      [ruleName]: message,
-    });
+    setMessages({ [ruleName]: message });
   }
 
   return this;
-}
-
-/**
- * @param {string} name
- * @returns {Rule}
- */
-export function getValidator(name) {
-  if (typeof validators[name] !== 'function') {
-    throw 'Validator for ' + name + ' does not exists';
-  }
-
-  return validators[name];
-}
-
-/**
- * Check if validation rule exists
- * @param {string} ruleName
- * @returns {boolean}
- */
-export function exists(ruleName) {
-  return typeof validators[ruleName] === 'function';
 }
 
 /**
@@ -238,7 +146,7 @@ export function validate(data, scheme, callback) {
     }
   }
 
-  const errorHandler = this.formatErrors(errors, failedRules);
+  const errorHandler = formatErrors(errors, failedRules);
 
   if (typeof callback == 'function') {
     callback(errorHandler);
