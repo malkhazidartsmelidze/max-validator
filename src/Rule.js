@@ -1,4 +1,9 @@
-import Validator from './Validator';
+import {
+  getValidator,
+  ruleSeparator,
+  ruleParamSeparator,
+  paramsSeparator,
+} from './Validator';
 
 const dontValidate = ['required', 'string', 'nullable', 'number'];
 
@@ -13,7 +18,7 @@ class Rule {
       this.isInlineFunction = false;
 
       if (dontValidate.indexOf(rule) === -1) {
-        this.validator = Validator.getValidator(this.name);
+        this.validator = getValidator(this.name);
       }
     } else if (typeof rule == 'function') {
       this.name = rule.name || 'default';
@@ -164,20 +169,20 @@ export function parseRulesObject(ruleSet) {
  */
 export function parseStringRules(ruleSet) {
   var rules = {};
-  var allRules = ruleSet.split(Validator.ruleSeparator);
+  var allRules = ruleSet.split(ruleSeparator);
 
   allRules
     .filter(function (val) {
       return val !== '';
     })
     .map(function (r) {
-      var _ruleParams = r.split(Validator.ruleParamSeparator);
+      var _ruleParams = r.split(ruleParamSeparator);
       var _ruleName = _ruleParams[0].trim();
       var rule = new Rule(_ruleName);
 
       var _params = _ruleParams[1];
       var _function_params =
-        _params !== undefined ? _params.split(Validator.paramsSeparator) : [];
+        _params !== undefined ? _params.split(paramsSeparator) : [];
       rule.setParams(_function_params);
 
       rules[_ruleName] = rule;
