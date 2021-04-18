@@ -180,7 +180,7 @@ export let methods = {
    * @return {{max}|boolean}
    */
   max(value, max) {
-    if (typeof value == 'string') {
+    if (typeof value === 'string') {
       if (value.length <= max) return true;
     } else if (typeof value !== undefined) {
       if (value <= max) return true;
@@ -194,7 +194,7 @@ export let methods = {
    * @return {{min}|boolean}
    */
   min(value, min) {
-    if (typeof value == 'string') {
+    if (typeof value === 'string') {
       if (value.length >= min) return true;
     } else if (typeof value !== undefined) {
       if (value >= min) return true;
@@ -233,7 +233,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   object(value) {
-    return typeof value !== 'object' ?? { value };
+    return typeof value === 'object' ?? { value };
   },
 
   /**
