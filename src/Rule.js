@@ -9,50 +9,41 @@ export let paramsSeparator = ',';
 /**
  * Override default rule separator
  * @param {string} separator
- * @returns {Validator}
  */
 export function setRuleSeparator(separator) {
   if (typeof separator !== 'string') {
     throw 'Separator must be string';
   }
-
   ruleSeparator = separator;
-  return this;
 }
 
 /**
  * Override default rule-params separator
  * @param {string} separator
- * @returns {Validator}
  */
 export function setRuleParamSeparator(separator) {
   if (typeof separator !== 'string') {
     throw 'Separator must be string';
   }
-
   ruleParamSeparator = separator;
-  return this;
 }
 
 /**
  * Override default params separator
  * @param {string} separator
- * @returns {Validator}
  */
 export function setParamsSeparator(separator) {
   if (typeof separator !== 'string') {
     throw 'Separator must be string';
   }
-
   paramsSeparator = separator;
-  return this;
 }
 
 /**
  * New rules
  * @param {string} rule
  */
-class Rule {
+export default class Rule {
   constructor(rule) {
     if (typeof rule == 'string') {
       this.name = rule;
@@ -117,9 +108,9 @@ class Rule {
 export function parseScheme(ruleScheme) {
   const rules = {};
 
-  for (var name in ruleScheme) {
-    var _ruleSet = ruleScheme[name];
-    var _rules = {};
+  for (let name in ruleScheme) {
+    let _ruleSet = ruleScheme[name];
+    let _rules = {};
 
     if (typeof _ruleSet == 'string') {
       _rules = parseStringRules(_ruleSet);
@@ -131,12 +122,12 @@ export function parseScheme(ruleScheme) {
       throw 'Invalid rules for ' + name;
     }
 
-    var isRequired = _rules.required !== undefined;
-    var isString = _rules.string !== undefined;
-    var isNumber = _rules.number !== undefined;
-    var isNullable = _rules.nullable !== undefined;
+    let isRequired = _rules.required !== undefined;
+    let isString = _rules.string !== undefined;
+    let isNumber = _rules.number !== undefined;
+    let isNullable = _rules.nullable !== undefined;
 
-    for (var i = 0; i < dontValidate.length; i++) {
+    for (let i = 0; i < dontValidate.length; i++) {
       delete _rules[dontValidate[i]];
     }
 
@@ -158,19 +149,17 @@ export function parseScheme(ruleScheme) {
  * @returns {Object}
  */
 export function parseArrayRules(ruleSet) {
-  var rules = {};
-  var i = 100;
+  let rules = {};
+  let i = 100;
   ruleSet.map(function (rule) {
     if (rule == null || rule === '') return;
 
     if (typeof rule == 'string') {
-      var parsedRule = parseStringRules(rule);
+      let parsedRule = parseStringRules(rule);
       Object.assign(rules, parsedRule);
     } else if (typeof rule == 'function') {
-      var _ruleName = rule.name.length > 0 ? rule.name : i++;
-      var _rule = new Rule(rule);
-
-      rules[_ruleName] = _rule;
+      let _ruleName = rule.name.length > 0 ? rule.name : i++;
+      rules[_ruleName] = new Rule(rule);
     }
   });
 
@@ -183,20 +172,17 @@ export function parseArrayRules(ruleSet) {
  * @returns {Object}
  */
 export function parseRulesObject(ruleSet) {
-  var rules = {};
-  var i = 100;
+  let rules = {};
+  let i = 100;
   Object.keys(ruleSet).map(function (ruleName) {
-    var ruleParam = ruleSet[ruleName];
+    let ruleParam = ruleSet[ruleName];
 
     if (typeof ruleParam == 'function') {
-      var _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
-      var _rule = new Rule(ruleParam);
-
-      rules[_ruleName] = _rule;
+      let _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
+      rules[_ruleName] = new Rule(ruleParam);
     } else {
-      var params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
-      var _rule = new Rule(ruleName).setParams(params);
-      rules[ruleName] = _rule;
+      let params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
+      rules[ruleName] = new Rule(ruleName).setParams(params);
     }
   });
 
@@ -209,27 +195,24 @@ export function parseRulesObject(ruleSet) {
  * @return {object} Parsed ruleSet
  */
 export function parseStringRules(ruleSet) {
-  var rules = {};
-  var allRules = ruleSet.split(ruleSeparator);
+  let rules = {};
+  let allRules = ruleSet.split(ruleSeparator);
 
   allRules
     .filter(function (val) {
       return val !== '';
     })
     .map(function (r) {
-      var _ruleParams = r.split(ruleParamSeparator);
-      var _ruleName = _ruleParams[0].trim();
-      var rule = new Rule(_ruleName);
+      let _ruleParams = r.split(ruleParamSeparator);
+      let _ruleName = _ruleParams[0].trim();
+      let rule = new Rule(_ruleName);
 
-      var _params = _ruleParams[1];
-      var _function_params =
+      let _params = _ruleParams[1];
+      let _function_params =
         _params !== undefined ? _params.split(paramsSeparator) : [];
       rule.setParams(_function_params);
-
       rules[_ruleName] = rule;
     });
 
   return rules;
 }
-
-export default Rule;
