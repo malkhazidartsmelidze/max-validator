@@ -1,24 +1,35 @@
 import { validate } from './Validator';
 
-test('should validate an object', () => {
+it('should validate an object', () => {
   const data = {
     name: 'Boris',
     age: 40,
   };
 
   const scheme = {
-    name: 'string:required',
+    name: 'string|required',
     age: 'numeric',
   };
 
   expect(validate(data, scheme).hasError).toBe(false);
 });
 
-test('should get errors on failed validation', () => {
+it('should get errors on failed validation', () => {
+  const data = {
+    age: 'twelve',
+  };
+
   const scheme = {
-    name: 'string|required',
     age: 'numeric|required',
   };
 
-  expect(Object.keys(validate({}, scheme).errors)).toEqual(['name', 'age']);
+  expect(validate(data, scheme).hasError).toBe(true);
+});
+
+it('should throw and error if the validation method does not exist', () => {
+  const scheme = {
+    name: 'unknown',
+  };
+
+  expect(() => validate({}, scheme)).toThrowError();
 });
