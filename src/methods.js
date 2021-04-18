@@ -266,17 +266,8 @@ export let methods = {
  * @returns {Rule}
  */
 export function getValidationMethod(name) {
-  if (typeof methods[name] !== 'function') {
-    throw 'Validation method for ' + name + ' does not exists';
+  if (methods.hasOwnProperty(name) === false) {
+    throw `The validation method "${name}" does not exist`;
   }
-
   return methods[name];
-}
-
-/**
- * @param {string} name
- * @returns {boolean}
- */
-export function exists(name) {
-  return typeof methods[name] === 'function';
 }
