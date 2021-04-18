@@ -4,7 +4,11 @@
   "description": "Advanced validation library for Javascript & Reactjs",
   "main": "dist/max-validator.js",
   "module": "dist/max-validator.mjs",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
+    "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "git+https://github.com/malkhazidartsmelidze/max-validator.git",
@@ -19,9 +23,6 @@
   "bugs": {
     "url": "https://github.com/malkhazidartsmelidze/max-validator/issues"
   },
-  "files": [
-    "dist/**/*"
-  ],
   "homepage": "https://github.com/malkhazidartsmelidze/max-validator#readme",
   "browserslist": {
     "production": [
@@ -31,8 +32,7 @@
     ]
   },
   "devDependencies": {
-    "browserify": "^16.5.1",
     "prettier": "^2.2.1",
-    "tinyify": "^2.5.2"
+    "rollup": "^2.45.2"
   }
 }
