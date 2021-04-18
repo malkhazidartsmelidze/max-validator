@@ -1,6 +1,6 @@
 import defaultMessages from './messages';
 import _validators from './validators';
-import Rule from './Rule';
+import { parseScheme } from './Rule';
 
 class Validator {
   validators = _validators;
@@ -215,7 +215,7 @@ class Validator {
       throw 'Both data and scheme must be object';
     }
 
-    var rules = Rule.parseScheme(scheme);
+    var rules = parseScheme(scheme);
 
     for (var paramName in rules) {
       failedRules[paramName] = [];
