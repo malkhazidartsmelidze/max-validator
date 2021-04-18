@@ -1,5 +1,6 @@
 import defaultMessages from './messages';
 import _validators from './validators';
+import Rule from './Rule';
 
 class Validator {
   validators = _validators;
@@ -41,11 +42,13 @@ class Validator {
 
   /**
    * Override default rule separator
-   * @param {string} separator new separator
+   * @param {string} separator
    * @returns {Validator}
    */
   setRuleSeparator(separator) {
-    if (typeof separator !== 'string') throw 'Separator must be string';
+    if (typeof separator !== 'string') {
+      throw 'Separator must be string';
+    }
 
     this.ruleSeparator = separator;
 
@@ -54,11 +57,13 @@ class Validator {
 
   /**
    * Override default rule-params separator
-   * @param {string} separator new separator
+   * @param {string} separator
    * @returns {Validator}
    */
   setRuleParamSeparator(separator) {
-    if (typeof separator !== 'string') throw 'Separator must be string';
+    if (typeof separator !== 'string') {
+      throw 'Separator must be string';
+    }
 
     this.ruleParamSeparator = separator;
 
@@ -67,11 +72,13 @@ class Validator {
 
   /**
    * Override default params separator
-   * @param {string} separator new separator
+   * @param {string} separator
    * @returns {Validator}
    */
   setParamsSeparator(separator) {
-    if (typeof separator !== 'string') throw 'Separator must be string';
+    if (typeof separator !== 'string') {
+      throw 'Separator must be string';
+    }
 
     this.paramsSeparator = separator;
 
@@ -80,10 +87,10 @@ class Validator {
 
   /**
    * Extend validation Rule
-   * @param {string} ruleName Rule Name to validate
-   * @param {function} validator Custom function for validation
+   * @param {string} ruleName
+   * @param {function} validator
    * @param {string|null} message
-   * @returns {Rule}
+   * @returns {Validator}
    */
   extend(ruleName, validator, message = null) {
     if (this.validators[ruleName] !== undefined) {
@@ -106,9 +113,7 @@ class Validator {
   }
 
   /**
-   * Extend validation Rule
-   * @param {string} ruleName Rule Name to validate
-   * @param {function} validator Custom function for validation
+   * @param {string} name
    * @returns {Rule}
    */
   getValidator(name) {
@@ -121,7 +126,7 @@ class Validator {
 
   /**
    * Check if validation rule exists
-   * @param {string} ruleName Rule name to check
+   * @param {string} ruleName
    * @returns {boolean}
    */
   exists(ruleName) {
@@ -130,8 +135,9 @@ class Validator {
 
   /**
    * Format Validation Messages
-   * @param {string} name Name of validated parameter
-   * @param {object|null} params Name of parameters of rule
+   * @param {string} name
+   * @param {object|null} params
+   * @param {string} ruleName
    * @returns {string}
    */
   formatMessage(name, params, ruleName) {
@@ -155,16 +161,16 @@ class Validator {
 
   /**
    * Format Validation Errors
-   * @param {object} errors Validation Errors
-   * @param {object} failedRules Validation failed rules
-   * @returns {string}
+   * @param {object} errors
+   * @param {object} failedRules
+   * @returns {object}
    */
   formatErrors(errors, failedRules) {
     return {
       hasError: Object.keys(errors).length > 0,
       errors: errors,
       isError: function (paramName, ruleName) {
-        if (ruleName == undefined) {
+        if (ruleName === undefined) {
           return errors[paramName] !== undefined;
         } else {
           return (
@@ -176,7 +182,7 @@ class Validator {
       getError: function (paramName, getAll = true) {
         if (
           !Array.isArray(errors[paramName]) ||
-          errors[paramName].length == 0
+          errors[paramName].length === 0
         ) {
           return '';
         }
@@ -198,10 +204,10 @@ class Validator {
    * Validate given data with given rules
    * @param {object} data Data to validate
    * @param {object} scheme Validation scheme
+   * @param {function?} callback
    * @returns {object}
    */
-  validate = function (data, scheme, callback) {
-    var Rule = require('./Rule');
+  validate(data, scheme, callback) {
     var errors = {};
     var failedRules = {};
 
@@ -238,14 +244,14 @@ class Validator {
       }
     }
 
-    var data = this.formatErrors(errors, failedRules);
+    const errorHandler = this.formatErrors(errors, failedRules);
 
     if (typeof callback == 'function') {
-      callback(data);
+      callback(errorHandler);
     }
 
-    return data;
-  };
+    return errorHandler;
+  }
 }
 
 export default new Validator();
