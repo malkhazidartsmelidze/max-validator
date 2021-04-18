@@ -1,5 +1,5 @@
-import { messages, defaultMessage, setMessages } from './messages';
-import { methods as validators } from './methods';
+import { messages, defaultMessage } from './messages';
+import { methods } from './methods';
 import { parseScheme } from './Rule';
 
 export { setMessages, setDefaultMessage } from './messages';
@@ -10,28 +10,26 @@ export {
 } from './Rule';
 
 /**
- * Extend validation Rule
- * @param {string} ruleName
- * @param {function} validator
+ * Extends `Validator` by adding new validation methods.
+ *
+ * @param {string} name
+ * @param {function} method
  * @param {string|null} message
- * @returns {Validator}
  */
-export function extend(ruleName, validator, message = null) {
-  if (validators[ruleName] !== undefined) {
-    throw 'Validator named ' + ruleName + ' already exists';
+export function extend(name, method, message = null) {
+  if (methods.hasOwnProperty(name)) {
+    throw `The validation method "${name}" already exists`;
   }
 
-  if (typeof validator !== 'function') {
-    throw 'Validator must be function';
+  if (typeof method !== 'function') {
+    throw 'The validation method must be function';
   }
 
-  validators[ruleName] = validator;
+  methods[name] = method;
 
-  if (message !== null) {
-    setMessages({ [ruleName]: message });
+  if (message) {
+    messages[name] = message;
   }
-
-  return this;
 }
 
 /**
