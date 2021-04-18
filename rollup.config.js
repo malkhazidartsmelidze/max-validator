@@ -1,3 +1,5 @@
+import { uglify } from 'rollup-plugin-uglify';
+
 export default {
   input: 'index.js',
   output: [
@@ -10,4 +12,5 @@ export default {
       format: 'es',
     },
   ],
+  plugins: [uglify()],
 };
