@@ -1,1 +1,1 @@
-export default from './src/Validator';
+export { default } from './src/Validator';
