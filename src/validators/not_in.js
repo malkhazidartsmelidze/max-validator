@@ -1,4 +1,4 @@
-module.exports = function (value, ...arr) {
+export default function (value, ...arr) {
   var err = {
     value: value,
   };
@@ -8,4 +8,4 @@ module.exports = function (value, ...arr) {
   }
 
   return err;
-};
+}

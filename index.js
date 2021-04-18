@@ -1,3 +1,1 @@
-var Validator = require('./src/Validator.js');
-
-module.exports = Validator;
+export default from './src/Validator';

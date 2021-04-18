@@ -1,26 +1,51 @@
-module.exports = {
-  min: require('./min'),
-  max: require('./max'),
-  between: require('./between'),
-  checked: require('./checked'),
-  object: require('./object'),
-  array: require('./array'),
-  boolean: require('./boolean'),
-  numeric: require('./numeric'),
-  alpha_numeric: require('./alpha_numeric'),
-  alpha: require('./alpha'),
-  email: require('./email'),
-  alpha_dash: require('./alpha_dash'),
-  in_array: require('./in_array'),
-  not_in: require('./not_in'),
-  json: require('./json'),
-  ip: require('./ip'),
-  url: require('./url'),
-  equals: require('./equals'),
-  not_equals: require('./not_equals'),
-  starts_with: require('./starts_with'),
-  contains_one: require('./contains_one'),
-  contains_all: require('./contains_all'),
-  ends_with: require('./ends_with'),
-  date: require('./date'),
+import min from './min';
+import max from './max';
+import between from './between';
+import checked from './checked';
+import object from './object';
+import array from './array';
+import boolean from './boolean';
+import numeric from './numeric';
+import alpha_numeric from './alpha_numeric';
+import alpha from './alpha';
+import email from './email';
+import alpha_dash from './alpha_dash';
+import in_array from './in_array';
+import not_in from './not_in';
+import json from './json';
+import ip from './ip';
+import url from './url';
+import equals from './equals';
+import not_equals from './not_equals';
+import starts_with from './starts_with';
+import contains_one from './contains_one';
+import contains_all from './contains_all';
+import ends_with from './ends_with';
+import date from './date';
+
+export default {
+  min,
+  max,
+  between,
+  checked,
+  object,
+  array,
+  boolean,
+  numeric,
+  alpha_numeric,
+  alpha,
+  email,
+  alpha_dash,
+  in_array,
+  not_in,
+  json,
+  ip,
+  url,
+  equals,
+  not_equals,
+  starts_with,
+  contains_one,
+  contains_all,
+  ends_with,
+  date,
 };

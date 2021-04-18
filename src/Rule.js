@@ -1,4 +1,4 @@
-var Validator = require('./Validator.js');
+import Validator from './Validator.js';
 
 var dontValidate = ['required', 'string', 'nullable', 'number'];
 
@@ -176,7 +176,8 @@ Rule.parseStringRules = function (ruleSet) {
       var rule = new Rule(_ruleName);
 
       var _params = _ruleParams[1];
-      var _function_params = _params !== undefined ? _params.split(Validator.paramsSeparator) : [];
+      var _function_params =
+        _params !== undefined ? _params.split(Validator.paramsSeparator) : [];
       rule.setParams(_function_params);
 
       rules[_ruleName] = rule;
@@ -185,4 +186,4 @@ Rule.parseStringRules = function (ruleSet) {
   return rules;
 };
 
-module.exports = Rule;
+export default Rule;

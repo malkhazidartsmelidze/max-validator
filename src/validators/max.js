@@ -1,4 +1,4 @@
-module.exports = function (value, max) {
+export default function (value, max) {
   var err = {
     max: max,
   };
@@ -10,4 +10,4 @@ module.exports = function (value, max) {
   }
 
   return err;
-};
+}

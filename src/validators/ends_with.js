@@ -1,4 +1,4 @@
-module.exports = function (value, suffix) {
+export default function (value, suffix) {
   var err = {
     suffix: suffix,
   };
@@ -11,4 +11,4 @@ module.exports = function (value, suffix) {
   }
 
   return err;
-};
+}

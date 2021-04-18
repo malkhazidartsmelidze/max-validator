@@ -1,4 +1,4 @@
-module.exports = function (value, ...values) {
+export default function (value, ...values) {
   if (!Array.isArray(value)) {
     value = String(value);
   }
@@ -14,4 +14,4 @@ module.exports = function (value, ...values) {
   }
 
   return true;
-};
+}

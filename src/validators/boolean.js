@@ -1,4 +1,4 @@
-module.exports = function (value) {
+export default function (value) {
   var err = {};
 
   if (typeof value !== 'boolean') {
@@ -6,4 +6,4 @@ module.exports = function (value) {
   }
 
   return true;
-};
+}

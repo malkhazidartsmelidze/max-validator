@@ -1,4 +1,4 @@
-module.exports = function (value, param) {
+export default function (value, param) {
   var err = {
     value: param,
   };
@@ -8,4 +8,4 @@ module.exports = function (value, param) {
   }
 
   return err;
-};
+}

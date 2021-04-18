@@ -1,4 +1,4 @@
-module.exports = function (value) {
+export default function (value) {
   var err = {
     value: value,
   };
@@ -12,4 +12,4 @@ module.exports = function (value) {
   }
 
   return err;
-};
+}

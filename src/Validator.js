@@ -1,5 +1,5 @@
-var defaultMessages = require('./messages');
-var _validators = require('./validators');
+import defaultMessages from './messages';
+import _validators from './validators';
 
 function Validator() {
   this.validators = _validators;
@@ -167,7 +167,8 @@ Validator.prototype.formatErrors = function (errors, failedRules) {
         return errors[paramName] !== undefined;
       } else {
         return (
-          failedRules[paramName] !== undefined && failedRules[paramName].indexOf(ruleName) !== -1
+          failedRules[paramName] !== undefined &&
+          failedRules[paramName].indexOf(ruleName) !== -1
         );
       }
     },
@@ -242,4 +243,4 @@ Validator.prototype.validate = function (data, scheme, callback) {
   return data;
 };
 
-module.exports = new Validator();
+export default new Validator();

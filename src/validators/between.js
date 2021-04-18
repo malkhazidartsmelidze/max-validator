@@ -1,4 +1,4 @@
-module.exports = function (value, from, to) {
+export default function (value, from, to) {
   var err = {
     from: from,
     to: to,
@@ -16,4 +16,4 @@ module.exports = function (value, from, to) {
   }
 
   return err;
-};
+}

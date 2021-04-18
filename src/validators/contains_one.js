@@ -1,4 +1,4 @@
-module.exports = function (value, ...values) {
+export default function (value, ...values) {
   var err = {
     value_to_contain: values.join(','),
   };
@@ -14,4 +14,4 @@ module.exports = function (value, ...values) {
   }
 
   return err;
-};
+}

@@ -1,4 +1,4 @@
-module.exports = function (value, prefix) {
+export default function (value, prefix) {
   var err = {
     prefix: prefix,
   };
@@ -11,4 +11,4 @@ module.exports = function (value, prefix) {
   }
 
   return true;
-};
+}

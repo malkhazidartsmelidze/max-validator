@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   required: ':name is required',
   min: ':name cant be less than :min',
   max: ':name cant be greater than :max',
@@ -7,7 +7,6 @@ module.exports = {
   array: ':name must be array',
   object: ':name must be object',
   boolean: ':name must be boolean',
-  array: ':name must be array',
   numeric: ':name can only contain digits',
   alpha_numeric: ':name can only contain digits and letters',
   alpha_dash: ':name can only contain letters and dashes',

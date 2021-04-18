@@ -1,4 +1,4 @@
-module.exports = function (value, min) {
+export default function (value, min) {
   var err = {
     min: min,
   };
@@ -10,4 +10,4 @@ module.exports = function (value, min) {
   }
 
   return err;
-};
+}

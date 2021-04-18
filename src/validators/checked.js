@@ -1,4 +1,4 @@
-module.exports = function (value) {
+export default function (value) {
   var err = {};
 
   if (value == 1 || value == 'on' || value == true || value == 'true') {
@@ -6,4 +6,4 @@ module.exports = function (value) {
   }
 
   return err;
-};
+}
