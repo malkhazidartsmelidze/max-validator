@@ -1,96 +1,136 @@
-var Validator = require('./Validator.js');
+import { getValidationMethod as getValidator } from './methods';
 
-var dontValidate = ['required', 'string', 'nullable', 'number'];
+const dontValidate = ['required', 'string', 'nullable', 'number'];
+
+export let ruleSeparator = '|';
+export let ruleParamSeparator = ':';
+export let paramsSeparator = ',';
 
 /**
- * New rules
- * @param {string} rule Rule name
+ * Override default rule separator
+ * @param {string} separator
  */
-function Rule(rule) {
-  if (typeof rule == 'string') {
-    this.name = rule;
-    this.isInlineFunction = false;
-
-    if (dontValidate.indexOf(rule) === -1) {
-      this.validator = Validator.getValidator(this.name);
-    }
-  } else if (typeof rule == 'function') {
-    this.name = rule.name || 'default';
-    this.isInlineFunction = true;
-    this.validator = rule;
+export function setRuleSeparator(separator) {
+  if (typeof separator !== 'string') {
+    throw 'Separator must be string';
   }
-
-  this.params = [];
+  ruleSeparator = separator;
 }
 
 /**
- * Validate given value
- * @param {any} value
- * @returns {Rule}
+ * Override default rule-params separator
+ * @param {string} separator
  */
-Rule.prototype.validate = function (rules, value, data) {
-  if (value == undefined || value == null || value == '') {
-    if (rules.isRequired) {
-      return {
-        rule: 'required',
-      };
-    } else if (rules.isNullable) {
-      return true;
+export function setRuleParamSeparator(separator) {
+  if (typeof separator !== 'string') {
+    throw 'Separator must be string';
+  }
+  ruleParamSeparator = separator;
+}
+
+/**
+ * Override default params separator
+ * @param {string} separator
+ */
+export function setParamsSeparator(separator) {
+  if (typeof separator !== 'string') {
+    throw 'Separator must be string';
+  }
+  paramsSeparator = separator;
+}
+
+/**
+ * @class Rule
+ * @param {string} rule
+ */
+export default class Rule {
+  /**
+   * @param {string|function} rule
+   */
+  constructor(rule) {
+    if (typeof rule === 'string') {
+      this.name = rule;
+      this.isInlineFunction = false;
+      if (dontValidate.indexOf(rule) === -1) {
+        this.validator = getValidator(this.name);
+      }
+    } else if (typeof rule === 'function') {
+      this.name = rule.name || 'default';
+      this.isInlineFunction = true;
+      this.validator = rule;
+    }
+
+    this.params = [];
+  }
+
+  /**
+   * @param {{}} rules
+   * @param {*} value
+   * @param {{}} data
+   * @return {{rule: string}|boolean|*}
+   */
+  validate(rules, value, data) {
+    if (value === undefined || value === null || value === '') {
+      if (rules.isRequired) {
+        return { rule: 'required' };
+      } else if (rules.isNullable) {
+        return true;
+      }
+    }
+
+    if (rules.isNumber) {
+      value = parseFloat(value);
+    } else if (rules.isString) {
+      value = String(value);
+    }
+
+    if (this.isInlineFunction) {
+      return this.validator(value, data);
+    } else {
+      return this.validator(value, ...this.params);
     }
   }
 
-  if (rules.isNumber) {
-    value = parseFloat(value);
-  } else if (rules.isString) {
-    value = String(value);
+  /**
+   * @param {array} params
+   * @return {Rule}
+   */
+  setParams(params = []) {
+    this.params = params;
+    return this;
   }
-
-  if (this.isInlineFunction) {
-    return this.validator(value, data);
-  } else {
-    return this.validator(value, ...this.params);
-  }
-};
+}
 
 /**
- * Set Validator function params
- * @param {array} params
- * @returns {Rule}
+ * Parse a complete scheme of rules.
+ * Can contains arrays, objects and strings.
+ *
+ * @param {{}} ruleScheme
+ * @return {{}} Parsed rules
  */
-Rule.prototype.setParams = function (params = []) {
-  this.params = params;
-
-  return this;
-};
-
-/**
- * Parse scheme of rules
- * @param {object} ruleScheme
- * @returns {object} Parsed rules
- */
-Rule.parseScheme = function (ruleScheme) {
+export function parseScheme(ruleScheme) {
   const rules = {};
 
-  for (var name in ruleScheme) {
-    var _ruleSet = ruleScheme[name];
-    var _rules = {};
+  for (let name in ruleScheme) {
+    let _ruleSet = ruleScheme[name];
+    let _rules = {};
 
-    if (typeof _ruleSet == 'string') {
-      _rules = Rule.parseStringRules(_ruleSet);
+    if (typeof _ruleSet === 'string') {
+      _rules = parseStringRules(_ruleSet);
     } else if (Array.isArray(_ruleSet)) {
-      _rules = Rule.parseArrayRules(_ruleSet);
-    } else if (typeof _ruleSet == 'object') {
-      _rules = Rule.parseRulesObject(_ruleSet);
+      _rules = parseArrayRules(_ruleSet);
+    } else if (typeof _ruleSet === 'object') {
+      _rules = parseObjectRules(_ruleSet);
     } else {
-      throw 'Invalid rules for ' + name;
+      throw `Invalid rules for ${name}`;
     }
 
-    var isRequired = _rules.required !== undefined;
-    var isString = _rules.string !== undefined;
-    var isNumber = _rules.number !== undefined;
-    var isNullable = _rules.nullable !== undefined;
+    let isRequired = _rules['required'] !== undefined;
+    let isString = _rules['string'] !== undefined;
+    let isNumber = _rules['number'] !== undefined;
+    let isNullable = _rules['nullable'] !== undefined;
 
-    for (var i = 0; i < dontValidate.length; i++) {
+    for (let i = 0; i < dontValidate.length; i++) {
       delete _rules[dontValidate[i]];
     }
 
@@ -104,85 +144,77 @@ Rule.parseScheme = function (ruleScheme) {
   }
 
   return rules;
-};
+}
 
 /**
- * If validation rules is array: ['required', 'max:20', someFunction ...]
- * @param {Array} ruleSet
- * @returns {Object}
+ * @example ['required', 'max:20', someFunction ...]
+ * @param {array} ruleSet
+ * @return {object}
  */
-Rule.parseArrayRules = function (ruleSet) {
-  var rules = {};
-  var i = 100;
+function parseArrayRules(ruleSet) {
+  let rules = {};
+  let i = 100;
   ruleSet.map(function (rule) {
-    if (rule == null || rule == '') return;
+    if (rule == null || rule === '') return;
 
-    if (typeof rule == 'string') {
-      var parsedRule = Rule.parseStringRules(rule);
+    if (typeof rule === 'string') {
+      let parsedRule = parseStringRules(rule);
       Object.assign(rules, parsedRule);
-    } else if (typeof rule == 'function') {
-      var _ruleName = rule.name.length > 0 ? rule.name : i++;
-      var _rule = new Rule(rule);
-
-      rules[_ruleName] = _rule;
+    } else if (typeof rule === 'function') {
+      let _ruleName = rule.name.length > 0 ? rule.name : i++;
+      rules[_ruleName] = new Rule(rule);
     }
   });
 
   return rules;
-};
+}
 
 /**
- * If validation rules is object: {required: true, in_array: [1, 2, 3, 4, 5] ... , custom: function(){}}
- * @param {Array} ruleSet
- * @returns {Object}
+ * @example {required: true, in_array: [1, 2, 3, 4, 5] ... , custom: function(){}}
+ * @param {object} ruleSet
+ * @return {object}
  */
-Rule.parseRulesObject = function (ruleSet) {
-  var rules = {};
-  var i = 100;
+function parseObjectRules(ruleSet) {
+  let rules = {};
+  let i = 100;
   Object.keys(ruleSet).map(function (ruleName) {
-    var ruleParam = ruleSet[ruleName];
+    let ruleParam = ruleSet[ruleName];
 
-    if (typeof ruleParam == 'function') {
-      var _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
-      var _rule = new Rule(ruleParam);
-
-      rules[_ruleName] = _rule;
+    if (typeof ruleParam === 'function') {
+      let _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
+      rules[_ruleName] = new Rule(ruleParam);
     } else {
-      var params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
-      var _rule = new Rule(ruleName).setParams(params);
-      rules[ruleName] = _rule;
+      let params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
+      rules[ruleName] = new Rule(ruleName).setParams(params);
     }
   });
 
   return rules;
-};
+}
 
 /**
- * Parse String rule set
  * @param {string} ruleSet
- * @return {object} Parsed ruleSet
+ * @return {object}
  */
-Rule.parseStringRules = function (ruleSet) {
-  var rules = {};
-  var allRules = ruleSet.split(Validator.ruleSeparator);
+function parseStringRules(ruleSet) {
+  let rules = {};
+  let allRules = ruleSet.split(ruleSeparator);
 
   allRules
     .filter(function (val) {
       return val !== '';
     })
     .map(function (r) {
-      var _ruleParams = r.split(Validator.ruleParamSeparator);
-      var _ruleName = _ruleParams[0].trim();
-      var rule = new Rule(_ruleName);
+      let _ruleParams = r.split(ruleParamSeparator);
+      let _ruleName = _ruleParams[0].trim();
+      let rule = new Rule(_ruleName);
 
-      var _params = _ruleParams[1];
-      var _function_params = _params !== undefined ? _params.split(Validator.paramsSeparator) : [];
+      let _params = _ruleParams[1];
+      let _function_params =
+        _params !== undefined ? _params.split(paramsSeparator) : [];
       rule.setParams(_function_params);
-
       rules[_ruleName] = rule;
     });
 
   return rules;
-};
-
-module.exports = Rule;
+}

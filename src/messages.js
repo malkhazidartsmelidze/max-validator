@@ -1,4 +1,12 @@
-module.exports = {
+/**
+ * @type {string}
+ */
+export let defaultMessage = 'Incorrect Value';
+
+/**
+ * @type {*}
+ */
+export let messages = {
   required: ':name is required',
   min: ':name cant be less than :min',
   max: ':name cant be greater than :max',
@@ -7,7 +15,6 @@ module.exports = {
   array: ':name must be array',
   object: ':name must be object',
   boolean: ':name must be boolean',
-  array: ':name must be array',
   numeric: ':name can only contain digits',
   alpha_numeric: ':name can only contain digits and letters',
   alpha_dash: ':name can only contain letters and dashes',
@@ -26,3 +33,25 @@ module.exports = {
   ends_with: ':name must end with :suffix',
   date: ':name must valid date',
 };
+
+/**
+ * @param {object} m
+ */
+export function setMessages(m) {
+  if (typeof m !== 'object') {
+    throw 'Messages must be object';
+  }
+
+  messages = { ...messages, ...m };
+}
+
+/**
+ * @param {string} msg
+ */
+export function setDefaultMessage(msg) {
+  if (typeof msg !== 'object') {
+    throw 'Messages must be object';
+  }
+
+  defaultMessage = msg;
+}
