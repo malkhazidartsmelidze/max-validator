@@ -126,7 +126,7 @@ export function validate(data, scheme, callback) {
       }
 
       let err;
-      if (typeof result == 'string') {
+      if (typeof result === 'string') {
         err = result;
       } else {
         err = formatMessage(paramName, result, ruleName);
@@ -146,7 +146,7 @@ export function validate(data, scheme, callback) {
 
   const errorHandler = formatErrors(errors, failedRules);
 
-  if (typeof callback == 'function') {
+  if (typeof callback === 'function') {
     callback(errorHandler);
   }
 

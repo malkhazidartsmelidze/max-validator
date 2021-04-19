@@ -263,7 +263,7 @@ export let methods = {
 
 /**
  * @param {string} name
- * @returns {Rule}
+ * @returns {function}
  */
 export function getValidationMethod(name) {
   if (methods.hasOwnProperty(name) === false) {

@@ -40,19 +40,21 @@ export function setParamsSeparator(separator) {
 }
 
 /**
- * New rules
+ * @class Rule
  * @param {string} rule
  */
 export default class Rule {
+  /**
+   * @param {string|function} rule
+   */
   constructor(rule) {
-    if (typeof rule == 'string') {
+    if (typeof rule === 'string') {
       this.name = rule;
       this.isInlineFunction = false;
-
       if (dontValidate.indexOf(rule) === -1) {
         this.validator = getValidator(this.name);
       }
-    } else if (typeof rule == 'function') {
+    } else if (typeof rule === 'function') {
       this.name = rule.name || 'default';
       this.isInlineFunction = true;
       this.validator = rule;
@@ -62,9 +64,9 @@ export default class Rule {
   }
 
   /**
-   * @param rules
-   * @param value
-   * @param data
+   * @param {{}} rules
+   * @param {*} value
+   * @param {{}} data
    * @return {{rule: string}|boolean|*}
    */
   validate(rules, value, data) {
@@ -90,9 +92,8 @@ export default class Rule {
   }
 
   /**
-   * Set Validator function params
    * @param {array} params
-   * @returns {Rule}
+   * @return {Rule}
    */
   setParams(params = []) {
     this.params = params;
@@ -101,9 +102,11 @@ export default class Rule {
 }
 
 /**
- * Parse scheme of rules
- * @param {object} ruleScheme
- * @returns {object} Parsed rules
+ * Parse a complete scheme of rules.
+ * Can contains arrays, objects and strings.
+ *
+ * @param {{}} ruleScheme
+ * @return {{}} Parsed rules
  */
 export function parseScheme(ruleScheme) {
   const rules = {};
@@ -112,20 +115,20 @@ export function parseScheme(ruleScheme) {
     let _ruleSet = ruleScheme[name];
     let _rules = {};
 
-    if (typeof _ruleSet == 'string') {
+    if (typeof _ruleSet === 'string') {
       _rules = parseStringRules(_ruleSet);
     } else if (Array.isArray(_ruleSet)) {
       _rules = parseArrayRules(_ruleSet);
-    } else if (typeof _ruleSet == 'object') {
-      _rules = parseRulesObject(_ruleSet);
+    } else if (typeof _ruleSet === 'object') {
+      _rules = parseObjectRules(_ruleSet);
     } else {
-      throw 'Invalid rules for ' + name;
+      throw `Invalid rules for ${name}`;
     }
 
-    let isRequired = _rules.required !== undefined;
-    let isString = _rules.string !== undefined;
-    let isNumber = _rules.number !== undefined;
-    let isNullable = _rules.nullable !== undefined;
+    let isRequired = _rules['required'] !== undefined;
+    let isString = _rules['string'] !== undefined;
+    let isNumber = _rules['number'] !== undefined;
+    let isNullable = _rules['nullable'] !== undefined;
 
     for (let i = 0; i < dontValidate.length; i++) {
       delete _rules[dontValidate[i]];
@@ -144,20 +147,20 @@ export function parseScheme(ruleScheme) {
 }
 
 /**
- * If validation rules is array: ['required', 'max:20', someFunction ...]
- * @param {Array} ruleSet
- * @returns {Object}
+ * @example ['required', 'max:20', someFunction ...]
+ * @param {array} ruleSet
+ * @return {object}
  */
-export function parseArrayRules(ruleSet) {
+function parseArrayRules(ruleSet) {
   let rules = {};
   let i = 100;
   ruleSet.map(function (rule) {
     if (rule == null || rule === '') return;
 
-    if (typeof rule == 'string') {
+    if (typeof rule === 'string') {
       let parsedRule = parseStringRules(rule);
       Object.assign(rules, parsedRule);
-    } else if (typeof rule == 'function') {
+    } else if (typeof rule === 'function') {
       let _ruleName = rule.name.length > 0 ? rule.name : i++;
       rules[_ruleName] = new Rule(rule);
     }
@@ -167,17 +170,17 @@ export function parseArrayRules(ruleSet) {
 }
 
 /**
- * If validation rules is object: {required: true, in_array: [1, 2, 3, 4, 5] ... , custom: function(){}}
- * @param {Array} ruleSet
- * @returns {Object}
+ * @example {required: true, in_array: [1, 2, 3, 4, 5] ... , custom: function(){}}
+ * @param {object} ruleSet
+ * @return {object}
  */
-export function parseRulesObject(ruleSet) {
+function parseObjectRules(ruleSet) {
   let rules = {};
   let i = 100;
   Object.keys(ruleSet).map(function (ruleName) {
     let ruleParam = ruleSet[ruleName];
 
-    if (typeof ruleParam == 'function') {
+    if (typeof ruleParam === 'function') {
       let _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
       rules[_ruleName] = new Rule(ruleParam);
     } else {
@@ -190,11 +193,10 @@ export function parseRulesObject(ruleSet) {
 }
 
 /**
- * Parse String rule set
  * @param {string} ruleSet
- * @return {object} Parsed ruleSet
+ * @return {object}
  */
-export function parseStringRules(ruleSet) {
+function parseStringRules(ruleSet) {
   let rules = {};
   let allRules = ruleSet.split(ruleSeparator);
 
