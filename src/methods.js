@@ -7,7 +7,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   alpha(value) {
-    return /^[a-zA-Z]+$/.test(value) ?? { value };
+    return /^[a-zA-Z]+$/.test(value) || { value };
   },
 
   /**
@@ -15,7 +15,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   alpha_dash(value) {
-    return /^[A-Za-z\-]+$/.test(value) ?? { value };
+    return /^[A-Za-z\-]+$/.test(value) || { value };
   },
 
   /**
@@ -23,7 +23,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   alpha_numeric(value) {
-    return /^[A-Za-z0-9]+$/.test(value) ?? { value };
+    return /^[A-Za-z0-9]+$/.test(value) || { value };
   },
 
   /**
@@ -31,7 +31,7 @@ export let methods = {
    * @return {boolean|{}}
    */
   array(value) {
-    return Array.isArray(value) ?? {};
+    return Array.isArray(value) || {};
   },
 
   /**
@@ -58,7 +58,7 @@ export let methods = {
    * @return {boolean}
    */
   boolean(value) {
-    return typeof value !== 'boolean' ?? {};
+    return typeof value !== 'boolean' || {};
   },
 
   /**
@@ -67,8 +67,7 @@ export let methods = {
    */
   checked(value) {
     return (
-      (value === 1 || value === 'on' || value === true || value === 'true') ??
-      {}
+      value === 1 || value === 'on' || value === true || value === 'true' || {}
     );
   },
 
@@ -111,7 +110,7 @@ export let methods = {
    * @return {boolean}
    */
   date(value) {
-    return Date.parse(value) !== window.NaN ?? {};
+    return Date.parse(value) !== window.NaN || {};
   },
 
   /**
@@ -119,7 +118,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   email(value) {
-    return emailRegex.test(value) ?? { value };
+    return emailRegex.test(value) || { value };
   },
 
   /**
@@ -131,7 +130,7 @@ export let methods = {
     suffix = String(suffix);
     value = String(value);
     return (
-      value.indexOf(suffix, value.length - suffix.length) !== -1 ?? { suffix }
+      value.indexOf(suffix, value.length - suffix.length) !== -1 || { suffix }
     );
   },
 
@@ -141,7 +140,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   equals(value, param) {
-    return String(value) === param ?? { value: param };
+    return String(value) === param || { value: param };
   },
 
   /**
@@ -150,7 +149,7 @@ export let methods = {
    * @return {boolean|{value: string}}
    */
   in_array(value, ...arr) {
-    return arr.indexOf(String(value)) > -1 ?? { value: arr.join(',') };
+    return arr.indexOf(String(value)) > -1 || { value: arr.join(',') };
   },
 
   /**
@@ -158,7 +157,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   ip(value) {
-    return ipRegex.test(value) ?? { value };
+    return ipRegex.test(value) || { value };
   },
 
   /**
@@ -208,7 +207,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   not_equals(value, param) {
-    return String(value) !== param ?? { value: param };
+    return String(value) !== param || { value: param };
   },
 
   /**
@@ -217,7 +216,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   not_in(value, ...arr) {
-    return arr.indexOf(String(value)) === -1 ?? { value };
+    return arr.indexOf(String(value)) === -1 || { value };
   },
 
   /**
@@ -225,7 +224,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   numeric(value) {
-    return /^\d+$/.test(value) ?? { value };
+    return /^\d+$/.test(value) || { value };
   },
 
   /**
@@ -233,7 +232,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   object(value) {
-    return typeof value === 'object' ?? { value };
+    return typeof value === 'object' || { value };
   },
 
   /**
@@ -244,7 +243,7 @@ export let methods = {
   starts_with(value, prefix) {
     prefix = String(prefix);
     value = String(value);
-    return value.indexOf(prefix) > 0 ?? { prefix };
+    return value.indexOf(prefix) > 0 || { prefix };
   },
 
   /**
