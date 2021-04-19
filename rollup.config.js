@@ -1,16 +1,20 @@
-import { uglify } from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
+import pkg from './package.json';
 
 export default {
   input: 'index.js',
   output: [
     {
-      file: 'dist/max-validator.js',
+      file: pkg.main,
       format: 'cjs',
+      sourcemap: true,
+      exports: 'auto',
     },
     {
-      file: 'dist/max-validator.mjs',
+      file: pkg.module,
       format: 'es',
+      sourcemap: true,
     },
   ],
-  plugins: [uglify()],
+  plugins: [terser()],
 };
