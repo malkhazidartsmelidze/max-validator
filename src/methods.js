@@ -123,7 +123,7 @@ export let methods = {
 
    /**
    * @param value
-   * @return {boolean|{value}}
+   * @return {boolean}
    */
   phone(value) {
     return (/^\d{7,}$/).test(value.replace(/[\s()+\-\.]|ext/gi, ''));
