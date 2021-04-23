@@ -121,6 +121,14 @@ export let methods = {
     return emailRegex.test(value) || { value };
   },
 
+   /**
+   * @param value
+   * @return {boolean|{value}}
+   */
+  phone(value) {
+    return (/^\d{7,}$/).test(value.replace(/[\s()+\-\.]|ext/gi, ''));
+  },
+
   /**
    * @param value
    * @param suffix
