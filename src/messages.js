@@ -49,8 +49,8 @@ export function setMessages(m) {
  * @param {string} msg
  */
 export function setDefaultMessage(msg) {
-  if (typeof msg !== 'object') {
-    throw 'Messages must be object';
+  if (typeof msg !== 'string') {
+    throw 'Default message must be a string';
   }
 
   defaultMessage = msg;
