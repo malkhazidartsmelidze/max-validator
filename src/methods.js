@@ -140,7 +140,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   equals(value, param) {
-    return String(value) === param || { value: param };
+    return String(value) === String(param) || { value: param };
   },
 
   /**

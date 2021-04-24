@@ -97,3 +97,14 @@ it('should validate value ending with another', () => {
   expect(ends_with('random_string', 'random')).not.toBe(true);
   expect(ends_with('random_string', 'str')).not.toBe(true);
 });
+
+it('should validate equal values', () => {
+  const { equals } = methods;
+
+  expect(equals('test', 'test')).toBe(true);
+  expect(equals('1', 1)).toBe(true);
+  expect(equals(1, 1)).toBe(true);
+
+  expect(equals('random_string', 'hello')).not.toBe(true);
+  expect(equals(1, true)).not.toBe(true);
+});
