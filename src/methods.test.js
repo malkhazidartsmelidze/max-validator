@@ -158,3 +158,15 @@ it('should validate value above min', () => {
   expect(min(40, 100)).not.toBe(true);
   expect(min('short_string', 20)).not.toBe(true);
 });
+
+it('should validate not equal values', () => {
+  const { not_equals } = methods;
+
+  expect(not_equals('random_string', 'hello')).toBe(true);
+  expect(not_equals(10, 20)).toBe(true);
+  expect(not_equals(1, true)).toBe(true);
+
+  expect(not_equals('test', 'test')).not.toBe(true);
+  expect(not_equals('1', 1)).not.toBe(true);
+  expect(not_equals(1, 1)).not.toBe(true);
+});

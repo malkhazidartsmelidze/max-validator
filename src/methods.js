@@ -207,7 +207,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   not_equals(value, param) {
-    return String(value) !== param || { value: param };
+    return String(value) !== String(param) || { value: param };
   },
 
   /**
