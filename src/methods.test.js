@@ -86,3 +86,14 @@ it('should validate an email', () => {
   expect(email(1)).not.toBe(true);
   expect(email('not_an_email')).not.toBe(true);
 });
+
+it('should validate value ending with another', () => {
+  const { ends_with } = methods;
+
+  expect(ends_with('random_string', 'ing')).toBe(true);
+  expect(ends_with('random_string', '_string')).toBe(true);
+
+  expect(ends_with('random_string', 'hello')).not.toBe(true);
+  expect(ends_with('random_string', 'random')).not.toBe(true);
+  expect(ends_with('random_string', 'str')).not.toBe(true);
+});
