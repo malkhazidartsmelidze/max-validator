@@ -13,3 +13,13 @@ it('should validate alpha/numeric characters', () => {
   expect(alpha_numeric('aBc1')).toBe(true);
   expect(alpha_numeric('aBc-1')).not.toBe(true);
 });
+
+it('should validate in between number values', () => {
+  const { between } = methods;
+
+  expect(between(10, 1, 10)).toBe(true);
+  expect(between(-20, 4, 7)).not.toBe(true);
+
+  expect(between('random_string', 10, 70)).toBe(true);
+  expect(between('random_string', 2, 4)).not.toBe(true);
+});
