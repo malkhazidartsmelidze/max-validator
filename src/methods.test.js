@@ -195,3 +195,14 @@ it('should validate numeric value', () => {
   expect(object(100)).not.toBe(true);
   expect(object('not_an_object')).not.toBe(true);
 });
+
+it('should validate value starting with another', () => {
+  const { starts_with } = methods;
+
+  expect(starts_with('random_string', 'random_')).toBe(true);
+  expect(starts_with('random_string', 'r')).toBe(true);
+
+  expect(starts_with('random_string', 'hello')).not.toBe(true);
+  expect(starts_with('random_string', 'dom')).not.toBe(true);
+  expect(starts_with('random_string', 'ing')).not.toBe(true);
+});

@@ -243,7 +243,7 @@ export let methods = {
   starts_with(value, prefix) {
     prefix = String(prefix);
     value = String(value);
-    return value.indexOf(prefix) > 0 || { prefix };
+    return value.indexOf(prefix) === 0 || { prefix };
   },
 
   /**
