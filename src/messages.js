@@ -20,6 +20,7 @@ export let messages = {
   alpha_dash: ':name can only contain letters and dashes',
   alpha: ':name can only contain leters',
   email: ':name must be correct mail',
+  phone: ':name must be a correct phone number',
   in_array: ':name is invalid',
   not_in: ":name can't be :value",
   json: ':name must be valid json',

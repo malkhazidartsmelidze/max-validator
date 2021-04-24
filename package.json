@@ -1,6 +1,6 @@
 {
   "name": "max-validator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Advanced validation library for Javascript & Reactjs",
   "main": "dist/max-validator.js",
   "module": "dist/max-validator.es.js",
@@ -8,6 +8,7 @@
     "dist/**/*"
   ],
   "scripts": {
+    "prepublishOnly": "rm dist/* -f && npm run build",
     "build": "rollup -c",
     "test": "jest"
   },
