@@ -131,3 +131,10 @@ it('should validate ip', () => {
   expect(ip(1)).not.toBe(true);
   expect(ip(true)).not.toBe(true);
 });
+
+it('should validate json', () => {
+  const { json } = methods;
+
+  expect(json('{"name": "Julia", "active": true}')).toBe(true);
+  expect(json('{"name": oops}')).not.toBe(true);
+});
