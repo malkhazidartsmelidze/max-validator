@@ -75,3 +75,14 @@ it('should validate a date', () => {
   expect(date('')).not.toBe(true);
   expect(date('1st of january')).not.toBe(true);
 });
+
+it('should validate an email', () => {
+  const { email } = methods;
+
+  expect(email('user@example.org')).toBe(true);
+  expect(email('user+1@example.com')).toBe(true);
+
+  expect(email(true)).not.toBe(true);
+  expect(email(1)).not.toBe(true);
+  expect(email('not_an_email')).not.toBe(true);
+});
