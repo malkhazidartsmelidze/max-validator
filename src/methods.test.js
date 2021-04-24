@@ -75,3 +75,156 @@ it('should validate a date', () => {
   expect(date('')).not.toBe(true);
   expect(date('1st of january')).not.toBe(true);
 });
+
+it('should validate an email', () => {
+  const { email } = methods;
+
+  expect(email('user@example.org')).toBe(true);
+  expect(email('user+1@example.com')).toBe(true);
+
+  expect(email(true)).not.toBe(true);
+  expect(email(1)).not.toBe(true);
+  expect(email('not_an_email')).not.toBe(true);
+});
+
+it('should validate value ending with another', () => {
+  const { ends_with } = methods;
+
+  expect(ends_with('random_string', 'ing')).toBe(true);
+  expect(ends_with('random_string', '_string')).toBe(true);
+
+  expect(ends_with('random_string', 'hello')).not.toBe(true);
+  expect(ends_with('random_string', 'random')).not.toBe(true);
+  expect(ends_with('random_string', 'str')).not.toBe(true);
+});
+
+it('should validate equal values', () => {
+  const { equals } = methods;
+
+  expect(equals('test', 'test')).toBe(true);
+  expect(equals('1', 1)).toBe(true);
+  expect(equals(1, 1)).toBe(true);
+
+  expect(equals('random_string', 'hello')).not.toBe(true);
+  expect(equals(1, true)).not.toBe(true);
+});
+
+it('should validate if value is in array', () => {
+  const { in_array } = methods;
+
+  expect(in_array('test', 'test')).toBe(true);
+  expect(in_array('test', 'a', 'b', 'test', 'a')).toBe(true);
+
+  expect(in_array('test', 'a', 'b', 'c')).not.toBe(true);
+});
+
+it('should validate ip', () => {
+  const { ip } = methods;
+
+  expect(ip('127.0.0.1')).toBe(true);
+  expect(ip('192.168.1.1')).toBe(true);
+
+  // TODO: Add ipv6 support
+  // expect(ip('::1')).toBe(true);
+
+  expect(ip('not_an_ip')).not.toBe(true);
+  expect(ip(1)).not.toBe(true);
+  expect(ip(true)).not.toBe(true);
+});
+
+it('should validate json', () => {
+  const { json } = methods;
+
+  expect(json('{"name": "Julia", "active": true}')).toBe(true);
+  expect(json('{"name": oops}')).not.toBe(true);
+});
+
+it('should validate value below max', () => {
+  const { max } = methods;
+
+  expect(max(40, 50)).toBe(true);
+  expect(max('short_string', 40)).toBe(true);
+
+  expect(max(40, -10)).not.toBe(true);
+  expect(max('short_string', 5)).not.toBe(true);
+});
+
+it('should validate value above min', () => {
+  const { min } = methods;
+
+  expect(min(40, 20)).toBe(true);
+  expect(min('short_string', 4)).toBe(true);
+
+  expect(min(40, 100)).not.toBe(true);
+  expect(min('short_string', 20)).not.toBe(true);
+});
+
+it('should validate not equal values', () => {
+  const { not_equals } = methods;
+
+  expect(not_equals('random_string', 'hello')).toBe(true);
+  expect(not_equals(10, 20)).toBe(true);
+  expect(not_equals(1, true)).toBe(true);
+
+  expect(not_equals('test', 'test')).not.toBe(true);
+  expect(not_equals('1', 1)).not.toBe(true);
+  expect(not_equals(1, 1)).not.toBe(true);
+});
+
+it('should validate numeric value', () => {
+  const { numeric } = methods;
+
+  expect(numeric(10)).toBe(true);
+  expect(numeric('10')).toBe(true);
+  expect(numeric(-10)).toBe(true);
+  expect(numeric('-10')).toBe(true);
+
+  expect(numeric(true)).not.toBe(true);
+  expect(numeric('twelve')).not.toBe(true);
+});
+
+it('should validate numeric value', () => {
+  const { object } = methods;
+
+  expect(object({})).toBe(true);
+  expect(object(new Map())).toBe(true);
+  expect(object({ name: 'Sergio' })).toBe(true);
+
+  expect(object([])).not.toBe(true);
+  expect(object(true)).not.toBe(true);
+  expect(object(100)).not.toBe(true);
+  expect(object('not_an_object')).not.toBe(true);
+});
+
+it('should validate value starting with another', () => {
+  const { starts_with } = methods;
+
+  expect(starts_with('random_string', 'random_')).toBe(true);
+  expect(starts_with('random_string', 'r')).toBe(true);
+
+  expect(starts_with('random_string', 'hello')).not.toBe(true);
+  expect(starts_with('random_string', 'dom')).not.toBe(true);
+  expect(starts_with('random_string', 'ing')).not.toBe(true);
+});
+
+it('should validate url', () => {
+  const { url } = methods;
+
+  expect(url('http://example.com')).toBe(true);
+  expect(url('https://www.example.org')).toBe(true);
+  expect(url('https://www.example.org/dir?param#hash')).toBe(true);
+
+  expect(url('a@a')).not.toBe(true);
+  expect(url(true)).not.toBe(true);
+});
+
+it('should validate phone numbers', () => {
+  const { phone } = methods;
+
+  expect(phone('1122334455')).toBe(true);
+  expect(phone('11 22 33 44 55')).toBe(true);
+  expect(phone('+33122334455')).toBe(true);
+
+  expect(phone(true)).not.toBe(true);
+  expect(phone(1)).not.toBe(true);
+});

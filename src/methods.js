@@ -121,12 +121,13 @@ export let methods = {
     return emailRegex.test(value) || { value };
   },
 
-   /**
+  /**
    * @param value
-   * @return {boolean}
+   * @return {boolean|{value}}
    */
   phone(value) {
-    return (/^\d{7,}$/).test(value.replace(/[\s()+\-\.]|ext/gi, ''));
+    value = String(value);
+    return /^\d{7,}$/.test(value.replace(/[\s()+\-\.]|ext/gi, '')) || { value };
   },
 
   /**
@@ -148,7 +149,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   equals(value, param) {
-    return String(value) === param || { value: param };
+    return String(value) === String(param) || { value: param };
   },
 
   /**
@@ -215,7 +216,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   not_equals(value, param) {
-    return String(value) !== param || { value: param };
+    return String(value) !== String(param) || { value: param };
   },
 
   /**
@@ -232,7 +233,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   numeric(value) {
-    return /^\d+$/.test(value) || { value };
+    return /^-?\d+$/.test(value) || { value };
   },
 
   /**
@@ -240,7 +241,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   object(value) {
-    return typeof value === 'object' || { value };
+    return (typeof value === 'object' && !Array.isArray(value)) || { value };
   },
 
   /**
@@ -251,7 +252,7 @@ export let methods = {
   starts_with(value, prefix) {
     prefix = String(prefix);
     value = String(value);
-    return value.indexOf(prefix) > 0 || { prefix };
+    return value.indexOf(prefix) === 0 || { prefix };
   },
 
   /**
