@@ -206,3 +206,14 @@ it('should validate value starting with another', () => {
   expect(starts_with('random_string', 'dom')).not.toBe(true);
   expect(starts_with('random_string', 'ing')).not.toBe(true);
 });
+
+it('should validate url', () => {
+  const { url } = methods;
+
+  expect(url('http://example.com')).toBe(true);
+  expect(url('https://www.example.org')).toBe(true);
+  expect(url('https://www.example.org/dir?param#hash')).toBe(true);
+
+  expect(url('a@a')).not.toBe(true);
+  expect(url(true)).not.toBe(true);
+});
