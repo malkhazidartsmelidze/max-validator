@@ -108,3 +108,26 @@ it('should validate equal values', () => {
   expect(equals('random_string', 'hello')).not.toBe(true);
   expect(equals(1, true)).not.toBe(true);
 });
+
+it('should validate if value is in array', () => {
+  const { in_array } = methods;
+
+  expect(in_array('test', 'test')).toBe(true);
+  expect(in_array('test', 'a', 'b', 'test', 'a')).toBe(true);
+
+  expect(in_array('test', 'a', 'b', 'c')).not.toBe(true);
+});
+
+it('should validate ip', () => {
+  const { ip } = methods;
+
+  expect(ip('127.0.0.1')).toBe(true);
+  expect(ip('192.168.1.1')).toBe(true);
+
+  // TODO: Add ipv6 support
+  // expect(ip('::1')).toBe(true);
+
+  expect(ip('not_an_ip')).not.toBe(true);
+  expect(ip(1)).not.toBe(true);
+  expect(ip(true)).not.toBe(true);
+});
