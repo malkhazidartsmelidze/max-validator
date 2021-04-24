@@ -33,3 +33,15 @@ it('should validate boolean values', () => {
   expect(boolean('true')).not.toBe(true);
   expect(boolean(1)).not.toBe(true);
 });
+
+it('should validate checkbox (checked) values', () => {
+  const { checked } = methods;
+
+  expect(checked(true)).toBe(true);
+  expect(checked(1)).toBe(true);
+  expect(checked('on')).toBe(true);
+  expect(checked('true')).toBe(true);
+
+  expect(checked('yes')).not.toBe(true);
+  expect(checked('checked')).not.toBe(true);
+});
