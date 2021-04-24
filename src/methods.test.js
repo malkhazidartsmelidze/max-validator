@@ -45,3 +45,23 @@ it('should validate checkbox (checked) values', () => {
   expect(checked('yes')).not.toBe(true);
   expect(checked('checked')).not.toBe(true);
 });
+
+it('should contain all the values', () => {
+  const { contains_all } = methods;
+
+  expect(contains_all([1, 2, 3], 1, 2, 3)).toBe(true);
+  expect(contains_all('random_string', 'str')).toBe(true);
+
+  expect(contains_all([1, 2, 3], 1, 4, 5)).not.toBe(true);
+  expect(contains_all('random_string', 'hello')).not.toBe(true);
+});
+
+it('should contain one of the values', () => {
+  const { contains_one } = methods;
+
+  expect(contains_one([1, 2, 3], 1, 4)).toBe(true);
+  expect(contains_one('random_string', 'str')).toBe(true);
+
+  expect(contains_one([1, 2, 3], 4, 5, 6)).not.toBe(true);
+  expect(contains_one('random_string', 'hello')).not.toBe(true);
+});
