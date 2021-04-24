@@ -1,4 +1,4 @@
-import { validate } from './Validator';
+import { validate, extend } from './Validator';
 
 it('should validate an object', () => {
   const data = {
@@ -32,4 +32,17 @@ it('should throw and error if the validation method does not exist', () => {
   };
 
   expect(() => validate({}, scheme)).toThrowError();
+});
+
+it('should be extended with custom rule', () => {
+  extend(
+    'custom_rule',
+    (value) => value === 'test' || { value },
+    'Default Error Message: :name cant be :value'
+  );
+
+  const scheme = { name: 'custom_rule' };
+
+  expect(validate({ name: 'test' }, scheme).hasError).toBe(false);
+  expect(validate({ name: 'not_test' }, scheme).hasError).toBe(true);
 });

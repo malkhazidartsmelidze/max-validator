@@ -58,7 +58,7 @@ export let methods = {
    * @return {boolean}
    */
   boolean(value) {
-    return typeof value !== 'boolean' || {};
+    return typeof value === 'boolean' || {};
   },
 
   /**
@@ -110,7 +110,7 @@ export let methods = {
    * @return {boolean}
    */
   date(value) {
-    return Date.parse(value) !== window.NaN || {};
+    return !isNaN(Date.parse(value)) || {};
   },
 
   /**
