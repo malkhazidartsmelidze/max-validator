@@ -58,7 +58,7 @@ export let methods = {
    * @return {boolean}
    */
   boolean(value) {
-    return typeof value !== 'boolean' || {};
+    return typeof value === 'boolean' || {};
   },
 
   /**

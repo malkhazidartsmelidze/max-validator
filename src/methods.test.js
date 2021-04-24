@@ -23,3 +23,13 @@ it('should validate in between number values', () => {
   expect(between('random_string', 10, 70)).toBe(true);
   expect(between('random_string', 2, 4)).not.toBe(true);
 });
+
+it('should validate boolean values', () => {
+  const { boolean } = methods;
+
+  expect(boolean(true)).toBe(true);
+  expect(boolean(false)).toBe(true);
+
+  expect(boolean('true')).not.toBe(true);
+  expect(boolean(1)).not.toBe(true);
+});
