@@ -138,3 +138,23 @@ it('should validate json', () => {
   expect(json('{"name": "Julia", "active": true}')).toBe(true);
   expect(json('{"name": oops}')).not.toBe(true);
 });
+
+it('should validate value below max', () => {
+  const { max } = methods;
+
+  expect(max(40, 50)).toBe(true);
+  expect(max('short_string', 40)).toBe(true);
+
+  expect(max(40, -10)).not.toBe(true);
+  expect(max('short_string', 5)).not.toBe(true);
+});
+
+it('should validate value above min', () => {
+  const { min } = methods;
+
+  expect(min(40, 20)).toBe(true);
+  expect(min('short_string', 4)).toBe(true);
+
+  expect(min(40, 100)).not.toBe(true);
+  expect(min('short_string', 20)).not.toBe(true);
+});
