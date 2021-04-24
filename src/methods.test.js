@@ -217,3 +217,14 @@ it('should validate url', () => {
   expect(url('a@a')).not.toBe(true);
   expect(url(true)).not.toBe(true);
 });
+
+it('should validate phone numbers', () => {
+  const { phone } = methods;
+
+  expect(phone('1122334455')).toBe(true);
+  expect(phone('11 22 33 44 55')).toBe(true);
+  expect(phone('+33122334455')).toBe(true);
+
+  expect(phone(true)).not.toBe(true);
+  expect(phone(1)).not.toBe(true);
+});

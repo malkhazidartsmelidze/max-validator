@@ -121,12 +121,13 @@ export let methods = {
     return emailRegex.test(value) || { value };
   },
 
-   /**
+  /**
    * @param value
-   * @return {boolean}
+   * @return {boolean|{value}}
    */
   phone(value) {
-    return (/^\d{7,}$/).test(value.replace(/[\s()+\-\.]|ext/gi, ''));
+    value = String(value);
+    return /^\d{7,}$/.test(value.replace(/[\s()+\-\.]|ext/gi, '')) || { value };
   },
 
   /**
