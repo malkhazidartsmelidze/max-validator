@@ -65,3 +65,13 @@ it('should contain one of the values', () => {
   expect(contains_one([1, 2, 3], 4, 5, 6)).not.toBe(true);
   expect(contains_one('random_string', 'hello')).not.toBe(true);
 });
+
+it('should validate a date', () => {
+  const { date } = methods;
+
+  expect(date('2000-01-01')).toBe(true);
+  expect(date(new Date())).toBe(true);
+
+  expect(date('')).not.toBe(true);
+  expect(date('1st of january')).not.toBe(true);
+});
