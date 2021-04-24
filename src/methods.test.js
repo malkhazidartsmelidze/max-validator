@@ -170,3 +170,15 @@ it('should validate not equal values', () => {
   expect(not_equals('1', 1)).not.toBe(true);
   expect(not_equals(1, 1)).not.toBe(true);
 });
+
+it('should validate numeric value', () => {
+  const { numeric } = methods;
+
+  expect(numeric(10)).toBe(true);
+  expect(numeric('10')).toBe(true);
+  expect(numeric(-10)).toBe(true);
+  expect(numeric('-10')).toBe(true);
+
+  expect(numeric(true)).not.toBe(true);
+  expect(numeric('twelve')).not.toBe(true);
+});

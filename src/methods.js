@@ -224,7 +224,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   numeric(value) {
-    return /^\d+$/.test(value) || { value };
+    return /^-?\d+$/.test(value) || { value };
   },
 
   /**
