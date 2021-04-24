@@ -182,3 +182,16 @@ it('should validate numeric value', () => {
   expect(numeric(true)).not.toBe(true);
   expect(numeric('twelve')).not.toBe(true);
 });
+
+it('should validate numeric value', () => {
+  const { object } = methods;
+
+  expect(object({})).toBe(true);
+  expect(object(new Map())).toBe(true);
+  expect(object({ name: 'Sergio' })).toBe(true);
+
+  expect(object([])).not.toBe(true);
+  expect(object(true)).not.toBe(true);
+  expect(object(100)).not.toBe(true);
+  expect(object('not_an_object')).not.toBe(true);
+});

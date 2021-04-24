@@ -232,7 +232,7 @@ export let methods = {
    * @return {boolean|{value}}
    */
   object(value) {
-    return typeof value === 'object' || { value };
+    return (typeof value === 'object' && !Array.isArray(value)) || { value };
   },
 
   /**
