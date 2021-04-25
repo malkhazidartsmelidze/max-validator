@@ -116,8 +116,8 @@ export function validate(data, scheme, callback) {
   for (let paramName in rules) {
     failedRules[paramName] = [];
 
-    for (let i = 0, l = rules[paramName].rules.length; i < l; i++) {
-      let rule = rules[paramName].rules[i];
+    for (let i = 0, l = rules[paramName].length; i < l; i++) {
+      let rule = rules[paramName][i];
       let result = rule.validate(rules[paramName], data[paramName], data);
       let ruleName = result.rule ? result.rule : rule.name;
 

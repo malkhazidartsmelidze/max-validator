@@ -47,9 +47,7 @@ function Rule(rule, params) {
   if (typeof rule === 'string') {
     name = rule;
     isFunction = false;
-    if (dontValidate.indexOf(rule) === -1) {
-      method = getValidationMethod(name);
-    }
+    method = getValidationMethod(name);
   } else if (typeof rule === 'function') {
     name = rule.name || 'default';
     isFunction = true;
@@ -78,36 +76,25 @@ function Rule(rule, params) {
  * Parse a complete scheme of rules.
  * Can contains arrays, objects and strings.
  *
- * @param {{}} ruleScheme
+ * @param {{}} scheme
  * @return {{}} Parsed rules
  */
-export function parseScheme(ruleScheme) {
-  const rules = {};
+export function parseScheme(scheme) {
+  const ruleset = {};
 
-  for (let name in ruleScheme) {
-    let _ruleSet = ruleScheme[name];
-    let _rules = {};
-
-    if (typeof _ruleSet === 'string') {
-      _rules = parseStringRules(_ruleSet);
-    } else if (Array.isArray(_ruleSet)) {
-      _rules = parseArrayRules(_ruleSet);
-    } else if (typeof _ruleSet === 'object') {
-      _rules = parseObjectRules(_ruleSet);
+  Object.entries(scheme).forEach(([propName, config]) => {
+    if (typeof config === 'string') {
+      ruleset[propName] = parseStringRules(config);
+    } else if (Array.isArray(config)) {
+      ruleset[propName] = parseArrayRules(config);
+    } else if (typeof config === 'object') {
+      ruleset[propName] = parseArrayRules(config);
     } else {
-      throw `Invalid rules for ${name}`;
+      throw `Invalid rules for ${propName}`;
     }
+  });
 
-    for (let i = 0; i < dontValidate.length; i++) {
-      delete _rules[dontValidate[i]];
-    }
-
-    rules[name] = {
-      rules: Object.values(_rules),
-    };
-  }
-
-  return rules;
+  return Object.values(ruleset);
 }
 
 /**
