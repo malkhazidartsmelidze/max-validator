@@ -1,3 +1,4 @@
+import { forEach, isPlainObject } from 'lodash-es';
 import { messages, defaultMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './scheme';
@@ -105,46 +106,44 @@ export function getEmpty() {
  */
 export function validate(data, scheme, callback) {
   let errors = {};
-  let failedRules = {};
+  let failed = {};
 
-  if (typeof data !== 'object' || typeof scheme !== 'object') {
-    throw 'Both data and scheme must be object';
+  if (!isPlainObject(data) || !isPlainObject(scheme)) {
+    throw 'Both data and scheme must be plain objects';
   }
 
   let rules = parseScheme(scheme);
 
-  for (let paramName in rules) {
-    failedRules[paramName] = [];
+  forEach(rules, (checks, propName) => {
+    failed[propName] = [];
 
-    for (let i = 0, l = rules[paramName].length; i < l; i++) {
-      let rule = rules[paramName][i];
-      let result = rule.validate(rules[paramName], data[paramName], data);
-      let ruleName = result.rule ? result.rule : rule.name;
+    forEach(checks, (checkFunction, ruleName) => {
+      let result = checkFunction(data[propName]);
 
       if (result === true) {
-        continue;
+        return;
       }
 
       let err;
       if (typeof result === 'string') {
         err = result;
       } else {
-        err = formatMessage(paramName, result, ruleName);
+        err = formatMessage(propName, result, ruleName);
       }
 
-      if (errors[paramName] === undefined) {
-        errors[paramName] = [err];
+      if (errors[propName] === undefined) {
+        errors[propName] = [err];
       } else {
-        if (errors[paramName].indexOf(err) === -1) {
-          errors[paramName].push(err);
+        if (errors[propName].indexOf(err) === -1) {
+          errors[propName].push(err);
         }
       }
 
-      failedRules[paramName].push(ruleName);
-    }
-  }
+      failed[propName].push(ruleName);
+    });
+  });
 
-  const errorHandler = formatErrors(errors, failedRules);
+  const errorHandler = formatErrors(errors, failed);
 
   if (typeof callback === 'function') {
     callback(errorHandler);

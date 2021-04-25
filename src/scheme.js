@@ -1,3 +1,4 @@
+import { mapValues } from 'lodash-es';
 import { getValidationMethod } from './methods';
 
 export let ruleSeparator = '|';
@@ -37,39 +38,6 @@ export function setParamsSeparator(separator) {
   paramsSeparator = separator;
 }
 
-function Rule(rule, params) {
-  let name;
-  let isFunction;
-  let method;
-
-  if (typeof rule === 'string') {
-    name = rule;
-    isFunction = false;
-    method = getValidationMethod(name);
-  } else if (typeof rule === 'function') {
-    name = rule.name || 'default';
-    isFunction = true;
-    method = rule;
-  }
-
-  return {
-    name,
-    /**
-     * @param {{}} rules
-     * @param {*} value
-     * @param {{}} data
-     * @return {{rule: string}|boolean|*}
-     */
-    validate(rules, value, data) {
-      if (isFunction) {
-        return method(value, data);
-      } else {
-        return method(value, ...params);
-      }
-    },
-  };
-}
-
 /**
  * Parse a complete scheme of rules.
  * Can contains arrays, objects and strings.
@@ -78,7 +46,7 @@ function Rule(rule, params) {
  * @return {{}} Parsed rules
  */
 export function parseScheme(scheme) {
-  return Object.values(scheme).map((config, propName) => {
+  return mapValues(scheme, (config, propName) => {
     if (typeof config === 'string') {
       return parseStringRules(config);
     }
@@ -96,45 +64,25 @@ export function parseScheme(scheme) {
 }
 
 /**
- * @example ['required', 'max:20', someFunction ...]
- * @param {array} ruleSet
+ * Parse an array of rules.
+ * Can contain string or functions.
+ *
+ * @example ['required', 'max:20', fn() => {}]
+ *
+ * @param {array} config
  * @return {object}
  */
-function parseArrayRules(ruleSet) {
-  let rules = {};
-  let i = 100;
-  ruleSet.map(function (rule) {
-    if (rule == null || rule === '') return;
+function parseArrayRules(config) {
+  const rules = {};
+  let i = 0;
 
+  config.forEach((rule) => {
     if (typeof rule === 'string') {
-      let parsedRule = parseStringRules(rule);
-      Object.assign(rules, parsedRule);
+      Object.assign(rules, parseStringRules(rule));
     } else if (typeof rule === 'function') {
-      let _ruleName = rule.name.length > 0 ? rule.name : i++;
-      rules[_ruleName] = Rule(rule);
-    }
-  });
-
-  return rules;
-}
-
-/**
- * @example {required: true, in_array: [1, 2, 3, 4, 5] ... , custom: function(){}}
- * @param {object} ruleSet
- * @return {object}
- */
-function parseObjectRules(ruleSet) {
-  let rules = {};
-  let i = 100;
-  Object.keys(ruleSet).map(function (ruleName) {
-    let ruleParam = ruleSet[ruleName];
-
-    if (typeof ruleParam === 'function') {
-      let _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
-      rules[_ruleName] = Rule(ruleParam);
+      rules[`anonymous_${i++}`] = rule;
     } else {
-      let params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
-      rules[ruleName] = Rule(ruleName, params);
+      throw `Couldn't parse the scheme, unsupported rule type: ${typeof rule}`;
     }
   });
 
@@ -142,27 +90,41 @@ function parseObjectRules(ruleSet) {
 }
 
 /**
- * @param {string} ruleSet
+ * @example {required: true, in_array: [1, 2, 3, 4, 5] ... , fn() => {}}
+ * @param {object} config
  * @return {object}
  */
-function parseStringRules(ruleSet) {
-  let rules = {};
-  let allRules = ruleSet.split(ruleSeparator);
+function parseObjectRules(config) {
+  const rules = {};
 
-  allRules
-    .filter(function (val) {
-      return val !== '';
-    })
-    .map(function (r) {
-      let _ruleParams = r.split(ruleParamSeparator);
-      let _ruleName = _ruleParams[0].trim();
+  Object.entries(config).forEach(([name, option]) => {
+    if (typeof option === 'function') {
+      rules[name] = (value) => option(value);
+    } else {
+      const params = Array.isArray(option) ? option : [option];
+      const method = getValidationMethod(name);
+      rules[name] = (value) => method(value, params);
+    }
+  });
 
-      let _params = _ruleParams[1];
-      let _function_params =
-        _params !== undefined ? _params.split(paramsSeparator) : [];
+  return rules;
+}
 
-      rules[_ruleName] = Rule(_ruleName, _function_params);
-    });
+/**
+ * @param {string} config
+ * @return {object}
+ */
+function parseStringRules(config) {
+  const defs = config.split(ruleSeparator).filter((v) => v);
+  const rules = {};
+
+  for (const data of defs) {
+    const parts = data.split(ruleParamSeparator);
+    const name = parts[0].trim();
+    const method = getValidationMethod(name);
+    const args = parts[1] !== undefined ? parts[1].split(paramsSeparator) : [];
+    rules[name] = (value) => method(value, ...args);
+  }
 
   return rules;
 }
