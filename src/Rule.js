@@ -1,4 +1,4 @@
-import { getValidationMethod as getValidator } from './methods';
+import { getValidationMethod } from './methods';
 
 const dontValidate = [];
 
@@ -39,52 +39,39 @@ export function setParamsSeparator(separator) {
   paramsSeparator = separator;
 }
 
-/**
- * @class Rule
- * @param {string} rule
- */
-export default class Rule {
-  /**
-   * @param {string|function} rule
-   */
-  constructor(rule) {
-    if (typeof rule === 'string') {
-      this.name = rule;
-      this.isInlineFunction = false;
-      if (dontValidate.indexOf(rule) === -1) {
-        this.validator = getValidator(this.name);
+function Rule(rule, params) {
+  let name;
+  let isFunction;
+  let method;
+
+  if (typeof rule === 'string') {
+    name = rule;
+    isFunction = false;
+    if (dontValidate.indexOf(rule) === -1) {
+      method = getValidationMethod(name);
+    }
+  } else if (typeof rule === 'function') {
+    name = rule.name || 'default';
+    isFunction = true;
+    method = rule;
+  }
+
+  return {
+    name,
+    /**
+     * @param {{}} rules
+     * @param {*} value
+     * @param {{}} data
+     * @return {{rule: string}|boolean|*}
+     */
+    validate(rules, value, data) {
+      if (isFunction) {
+        return method(value, data);
+      } else {
+        return method(value, ...params);
       }
-    } else if (typeof rule === 'function') {
-      this.name = rule.name || 'default';
-      this.isInlineFunction = true;
-      this.validator = rule;
-    }
-
-    this.params = [];
-  }
-
-  /**
-   * @param {{}} rules
-   * @param {*} value
-   * @param {{}} data
-   * @return {{rule: string}|boolean|*}
-   */
-  validate(rules, value, data) {
-    if (this.isInlineFunction) {
-      return this.validator(value, data);
-    } else {
-      return this.validator(value, ...this.params);
-    }
-  }
-
-  /**
-   * @param {array} params
-   * @return {Rule}
-   */
-  setParams(params = []) {
-    this.params = params;
-    return this;
-  }
+    },
+  };
 }
 
 /**
@@ -139,7 +126,7 @@ function parseArrayRules(ruleSet) {
       Object.assign(rules, parsedRule);
     } else if (typeof rule === 'function') {
       let _ruleName = rule.name.length > 0 ? rule.name : i++;
-      rules[_ruleName] = new Rule(rule);
+      rules[_ruleName] = Rule(rule);
     }
   });
 
@@ -159,10 +146,10 @@ function parseObjectRules(ruleSet) {
 
     if (typeof ruleParam === 'function') {
       let _ruleName = ruleParam.name.length > 0 ? ruleParam.name : i++;
-      rules[_ruleName] = new Rule(ruleParam);
+      rules[_ruleName] = Rule(ruleParam);
     } else {
       let params = Array.isArray(ruleParam) ? ruleParam : [ruleParam];
-      rules[ruleName] = new Rule(ruleName).setParams(params);
+      rules[ruleName] = Rule(ruleName, params);
     }
   });
 
@@ -184,13 +171,12 @@ function parseStringRules(ruleSet) {
     .map(function (r) {
       let _ruleParams = r.split(ruleParamSeparator);
       let _ruleName = _ruleParams[0].trim();
-      let rule = new Rule(_ruleName);
 
       let _params = _ruleParams[1];
       let _function_params =
         _params !== undefined ? _params.split(paramsSeparator) : [];
-      rule.setParams(_function_params);
-      rules[_ruleName] = rule;
+
+      rules[_ruleName] = Rule(_ruleName, _function_params);
     });
 
   return rules;
