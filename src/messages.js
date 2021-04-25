@@ -74,5 +74,5 @@ export function formatMessage(name, params = {}) {
   let message = messages[name];
 
   // Replaces all the ":key" parts with its value
-  return reduce(params, (m, k, v) => m.replace(`:${k}`, v), message);
+  return reduce(params, (m, v, k) => m.replace(`:${k}`, v), message);
 }
