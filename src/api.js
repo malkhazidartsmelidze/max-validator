@@ -1,4 +1,13 @@
-import { forEach, isFunction, isPlainObject, isString, keys } from 'lodash-es';
+import {
+  first,
+  forEach,
+  has,
+  isArray,
+  isFunction,
+  isPlainObject,
+  isString,
+  size,
+} from 'lodash-es';
 import { messages, formatMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './scheme';
@@ -18,12 +27,12 @@ export {
  * @param {string|null} message
  */
 export function extend(name, method, message = null) {
-  if (methods.hasOwnProperty(name)) {
+  if (has(methods, name)) {
     throw `The validation method "${name}" already exists`;
   }
 
-  if (typeof method !== 'function') {
-    throw 'The validation method must be function';
+  if (!isFunction(method)) {
+    throw `The validation method must be a function, type given: ${typeof method}`;
   }
 
   methods[name] = method;
@@ -31,35 +40,6 @@ export function extend(name, method, message = null) {
   if (message) {
     messages[name] = message;
   }
-}
-
-/**
- * Format Validation Errors
- * @param {object} errors
- * @param {object} failedRules
- * @returns {object}
- */
-function getResultObject(errors, failedRules) {
-  return {
-    hasError: keys(errors).length > 0,
-    errors: errors,
-    isError(paramName, ruleName) {
-      if (ruleName === undefined) {
-        return errors[paramName] !== undefined;
-      } else {
-        return (
-          failedRules[paramName] !== undefined &&
-          failedRules[paramName].indexOf(ruleName) !== -1
-        );
-      }
-    },
-    getError(paramName, getAll = true) {
-      if (!Array.isArray(errors[paramName]) || errors[paramName].length === 0) {
-        return '';
-      }
-      return getAll ? errors[paramName].join(',') : errors[paramName][0];
-    },
-  };
 }
 
 /**
@@ -109,7 +89,7 @@ export function validate(data, scheme, callback = null) {
     });
   });
 
-  const result = getResultObject(errors, failed);
+  const result = getValidationResult(errors, failed);
 
   if (isFunction(callback)) {
     callback(result);
@@ -124,4 +104,58 @@ export function validate(data, scheme, callback = null) {
  */
 export function getEmpty() {
   return validate({}, {});
+}
+
+/**
+ * Get the result object from the `validate()` function.
+ * Contains the errors and helpers.
+ *
+ * @param {object} errors
+ * @param {object} failed
+ * @returns {object}
+ */
+function getValidationResult(errors, failed) {
+  return {
+    /**
+     * @type {boolean}
+     */
+    hasError: size(errors) > 0,
+
+    /**
+     * @type {Object}
+     */
+    errors,
+
+    /**
+     * Returns TRUE if the property has an error.
+     *
+     * @param propName
+     * @param ruleName
+     * @return {boolean}
+     */
+    isError(propName, ruleName = null) {
+      if (ruleName === undefined) {
+        return errors[propName] !== undefined;
+      } else {
+        return (
+          failed[propName] !== undefined &&
+          failed[propName].indexOf(ruleName) !== -1
+        );
+      }
+    },
+
+    /**
+     * Returns the error messages for a property.
+     *
+     * @param {string} propName
+     * @param {boolean} all
+     * @return {string|*}
+     */
+    getError(propName, all = true) {
+      if (!isArray(errors[propName]) || size(errors[propName]) === 0) {
+        return '';
+      }
+      return all ? errors[propName].join(',') : first(errors[propName]);
+    },
+  };
 }
