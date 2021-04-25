@@ -1,3 +1,5 @@
+import { reduce } from 'lodash-es';
+
 /**
  * @type {string}
  */
@@ -55,4 +57,22 @@ export function setDefaultMessage(msg) {
   }
 
   defaultMessage = msg;
+}
+
+/**
+ * Format the validation messages.
+ *
+ * @param {string} name
+ * @param {object} params
+ * @returns {string}
+ */
+export function formatMessage(name, params = {}) {
+  if (messages[name] === undefined) {
+    return defaultMessage;
+  }
+
+  let message = messages[name];
+
+  // Replaces all the ":key" parts with its value
+  return reduce(params, (m, k, v) => m.replace(`:${k}`, v), message);
 }

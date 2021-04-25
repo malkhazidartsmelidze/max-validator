@@ -1,5 +1,5 @@
-import { forEach, isPlainObject } from 'lodash-es';
-import { messages, defaultMessage } from './messages';
+import { forEach, isPlainObject, isString, keys } from 'lodash-es';
+import { messages, formatMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './scheme';
 
@@ -34,42 +34,16 @@ export function extend(name, method, message = null) {
 }
 
 /**
- * Format Validation Messages
- * @param {string} name
- * @param {object|null} params
- * @param {string} ruleName
- * @returns {string}
- */
-export function formatMessage(name, params, ruleName) {
-  if (typeof params !== 'object') {
-    params = {};
-  }
-  params.name = name;
-
-  if (messages[ruleName] === undefined) {
-    return defaultMessage;
-  }
-
-  let message = messages[ruleName];
-
-  Object.keys(params).map(function (key) {
-    message = message.replace(':' + key, params[key]);
-  });
-
-  return message;
-}
-
-/**
  * Format Validation Errors
  * @param {object} errors
  * @param {object} failedRules
  * @returns {object}
  */
-export function formatErrors(errors, failedRules) {
+function getResultObject(errors, failedRules) {
   return {
-    hasError: Object.keys(errors).length > 0,
+    hasError: keys(errors).length > 0,
     errors: errors,
-    isError: function (paramName, ruleName) {
+    isError(paramName, ruleName) {
       if (ruleName === undefined) {
         return errors[paramName] !== undefined;
       } else {
@@ -79,21 +53,13 @@ export function formatErrors(errors, failedRules) {
         );
       }
     },
-    getError: function (paramName, getAll = true) {
+    getError(paramName, getAll = true) {
       if (!Array.isArray(errors[paramName]) || errors[paramName].length === 0) {
         return '';
       }
       return getAll ? errors[paramName].join(',') : errors[paramName][0];
     },
   };
-}
-
-/**
- * Get empty Validator
- * @return {object}
- */
-export function getEmpty() {
-  return validate({}, {});
 }
 
 /**
@@ -125,10 +91,10 @@ export function validate(data, scheme, callback) {
       }
 
       let err;
-      if (typeof result === 'string') {
+      if (isString(result)) {
         err = result;
-      } else {
-        err = formatMessage(propName, result, ruleName);
+      } else if (isPlainObject(result)) {
+        err = formatMessage(ruleName, { name: propName, ...result });
       }
 
       if (errors[propName] === undefined) {
@@ -143,11 +109,19 @@ export function validate(data, scheme, callback) {
     });
   });
 
-  const errorHandler = formatErrors(errors, failed);
+  const result = getResultObject(errors, failed);
 
   if (typeof callback === 'function') {
-    callback(errorHandler);
+    callback(result);
   }
 
-  return errorHandler;
+  return result;
+}
+
+/**
+ * Get empty result object (used for placeholder)
+ * @return {object}
+ */
+export function getEmpty() {
+  return validate({}, {});
 }
