@@ -1,4 +1,12 @@
-import { mapValues } from 'lodash-es';
+import {
+  assign,
+  forEach,
+  isArray,
+  isFunction,
+  isPlainObject,
+  isString,
+  mapValues,
+} from 'lodash-es';
 import { getValidationMethod } from './methods';
 
 export let ruleSeparator = '|';
@@ -10,7 +18,7 @@ export let paramsSeparator = ',';
  * @param {string} separator
  */
 export function setRuleSeparator(separator) {
-  if (typeof separator !== 'string') {
+  if (isString(separator)) {
     throw 'Separator must be string';
   }
   ruleSeparator = separator;
@@ -21,7 +29,7 @@ export function setRuleSeparator(separator) {
  * @param {string} separator
  */
 export function setRuleParamSeparator(separator) {
-  if (typeof separator !== 'string') {
+  if (isString(separator)) {
     throw 'Separator must be string';
   }
   ruleParamSeparator = separator;
@@ -32,7 +40,7 @@ export function setRuleParamSeparator(separator) {
  * @param {string} separator
  */
 export function setParamsSeparator(separator) {
-  if (typeof separator !== 'string') {
+  if (isString(separator)) {
     throw 'Separator must be string';
   }
   paramsSeparator = separator;
@@ -47,15 +55,15 @@ export function setParamsSeparator(separator) {
  */
 export function parseScheme(scheme) {
   return mapValues(scheme, (config, propName) => {
-    if (typeof config === 'string') {
+    if (isString(config)) {
       return parseStringRules(config);
     }
 
-    if (Array.isArray(config)) {
+    if (isArray(config)) {
       return parseArrayRules(config);
     }
 
-    if (typeof config === 'object') {
+    if (isPlainObject(config)) {
       return parseObjectRules(config);
     }
 
@@ -76,10 +84,10 @@ function parseArrayRules(config) {
   const rules = {};
   let i = 0;
 
-  config.forEach((rule) => {
-    if (typeof rule === 'string') {
-      Object.assign(rules, parseStringRules(rule));
-    } else if (typeof rule === 'function') {
+  forEach(config, (rule) => {
+    if (isString(rule)) {
+      assign(rules, parseStringRules(rule));
+    } else if (isFunction(rule)) {
       rules[`anonymous_${i++}`] = rule;
     } else {
       throw `Couldn't parse the scheme, unsupported rule type: ${typeof rule}`;
@@ -97,11 +105,11 @@ function parseArrayRules(config) {
 function parseObjectRules(config) {
   const rules = {};
 
-  Object.entries(config).forEach(([name, option]) => {
-    if (typeof option === 'function') {
+  forEach(config, (option, name) => {
+    if (isFunction(option)) {
       rules[name] = (value) => option(value);
     } else {
-      const params = Array.isArray(option) ? option : [option];
+      const params = isArray(option) ? option : [option];
       const method = getValidationMethod(name);
       rules[name] = (value) => method(value, params);
     }
@@ -118,13 +126,13 @@ function parseStringRules(config) {
   const defs = config.split(ruleSeparator).filter((v) => v);
   const rules = {};
 
-  for (const data of defs) {
+  forEach(defs, (data) => {
     const parts = data.split(ruleParamSeparator);
     const name = parts[0].trim();
     const method = getValidationMethod(name);
-    const args = parts[1] !== undefined ? parts[1].split(paramsSeparator) : [];
+    const args = isString(parts[1]) ? parts[1].split(paramsSeparator) : [];
     rules[name] = (value) => method(value, ...args);
-  }
+  });
 
   return rules;
 }
