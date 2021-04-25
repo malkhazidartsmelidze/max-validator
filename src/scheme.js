@@ -1,7 +1,5 @@
 import { getValidationMethod } from './methods';
 
-const dontValidate = [];
-
 export let ruleSeparator = '|';
 export let ruleParamSeparator = ':';
 export let paramsSeparator = ',';
@@ -90,7 +88,7 @@ export function parseScheme(scheme) {
     }
 
     if (typeof config === 'object') {
-      return parseArrayRules(config);
+      return parseObjectRules(config);
     }
 
     throw `Invalid rules for ${propName}`;

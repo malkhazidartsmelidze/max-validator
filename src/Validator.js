@@ -1,13 +1,13 @@
 import { messages, defaultMessage } from './messages';
 import { methods } from './methods';
-import { parseScheme } from './Rule';
+import { parseScheme } from './scheme';
 
 export { setMessages, setDefaultMessage } from './messages';
 export {
   setRuleSeparator,
   setRuleParamSeparator,
   setParamsSeparator,
-} from './Rule';
+} from './scheme';
 
 /**
  * Extends `Validator` by adding new validation methods.
