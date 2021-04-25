@@ -1,4 +1,4 @@
-import { forEach, isPlainObject, isString, keys } from 'lodash-es';
+import { forEach, isFunction, isPlainObject, isString, keys } from 'lodash-es';
 import { messages, formatMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './scheme';
@@ -70,7 +70,7 @@ function getResultObject(errors, failedRules) {
  * @param {function?} callback
  * @returns {object}
  */
-export function validate(data, scheme, callback) {
+export function validate(data, scheme, callback = null) {
   let errors = {};
   let failed = {};
 
@@ -111,7 +111,7 @@ export function validate(data, scheme, callback) {
 
   const result = getResultObject(errors, failed);
 
-  if (typeof callback === 'function') {
+  if (isFunction(callback)) {
     callback(result);
   }
 
