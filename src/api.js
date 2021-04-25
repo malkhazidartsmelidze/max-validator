@@ -6,6 +6,8 @@ import {
   isFunction,
   isPlainObject,
   isString,
+  map,
+  mapValues,
   size,
 } from 'lodash-es';
 import { messages, formatMessage } from './messages';
@@ -117,15 +119,17 @@ function getValidationResult(errors) {
     hasError: size(errors) > 0,
 
     /**
+     * A map with the error messages for each properties.
+     *
      * @type {Object}
      */
-    errors,
+    errors: mapValues(errors, (e) => map(e, ({ err }) => err)),
 
     /**
      * Returns TRUE if the property has an error.
      *
-     * @param propName
-     * @param ruleName
+     * @param {string} propName
+     * @param {string|*} ruleName
      * @return {boolean}
      */
     isError(propName, ruleName = null) {
@@ -133,7 +137,7 @@ function getValidationResult(errors) {
         return has(errors, propName);
       }
 
-      return has(errors, propName) && find(errors[propName], { ruleName });
+      return !!find(errors[propName], { ruleName });
     },
 
     /**
