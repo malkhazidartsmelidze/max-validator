@@ -1,7 +1,7 @@
-import { methods } from './methods';
+import { functions } from './rules';
 
 it('should validate alpha/numeric characters', () => {
-  const { alpha, alpha_dash, alpha_numeric } = methods;
+  const { alpha, alpha_dash, alpha_numeric } = functions;
 
   expect(alpha('aAbBcCdD')).toBe(true);
   expect(alpha('Abc123')).not.toBe(true);
@@ -15,7 +15,7 @@ it('should validate alpha/numeric characters', () => {
 });
 
 it('should validate in between number values', () => {
-  const { between } = methods;
+  const { between } = functions;
 
   expect(between(10, 1, 10)).toBe(true);
   expect(between(-20, 4, 7)).not.toBe(true);
@@ -25,7 +25,7 @@ it('should validate in between number values', () => {
 });
 
 it('should validate boolean values', () => {
-  const { boolean } = methods;
+  const { boolean } = functions;
 
   expect(boolean(true)).toBe(true);
   expect(boolean(false)).toBe(true);
@@ -35,7 +35,7 @@ it('should validate boolean values', () => {
 });
 
 it('should validate checkbox (checked) values', () => {
-  const { checked } = methods;
+  const { checked } = functions;
 
   expect(checked(true)).toBe(true);
   expect(checked(1)).toBe(true);
@@ -47,7 +47,7 @@ it('should validate checkbox (checked) values', () => {
 });
 
 it('should contain all the values', () => {
-  const { contains_all } = methods;
+  const { contains_all } = functions;
 
   expect(contains_all([1, 2, 3], 1, 2, 3)).toBe(true);
   expect(contains_all('random_string', 'str')).toBe(true);
@@ -57,7 +57,7 @@ it('should contain all the values', () => {
 });
 
 it('should contain one of the values', () => {
-  const { contains_one } = methods;
+  const { contains_one } = functions;
 
   expect(contains_one([1, 2, 3], 1, 4)).toBe(true);
   expect(contains_one('random_string', 'str')).toBe(true);
@@ -67,7 +67,7 @@ it('should contain one of the values', () => {
 });
 
 it('should validate a date', () => {
-  const { date } = methods;
+  const { date } = functions;
 
   expect(date('2000-01-01')).toBe(true);
   expect(date(new Date())).toBe(true);
@@ -77,7 +77,7 @@ it('should validate a date', () => {
 });
 
 it('should validate an email', () => {
-  const { email } = methods;
+  const { email } = functions;
 
   expect(email('user@example.org')).toBe(true);
   expect(email('user+1@example.com')).toBe(true);
@@ -88,7 +88,7 @@ it('should validate an email', () => {
 });
 
 it('should validate value ending with another', () => {
-  const { ends_with } = methods;
+  const { ends_with } = functions;
 
   expect(ends_with('random_string', 'ing')).toBe(true);
   expect(ends_with('random_string', '_string')).toBe(true);
@@ -99,7 +99,7 @@ it('should validate value ending with another', () => {
 });
 
 it('should validate equal values', () => {
-  const { equals } = methods;
+  const { equals } = functions;
 
   expect(equals('test', 'test')).toBe(true);
   expect(equals('1', 1)).toBe(true);
@@ -110,7 +110,7 @@ it('should validate equal values', () => {
 });
 
 it('should validate if value is in array', () => {
-  const { in_array } = methods;
+  const { in_array } = functions;
 
   expect(in_array('test', 'test')).toBe(true);
   expect(in_array('test', 'a', 'b', 'test', 'a')).toBe(true);
@@ -119,7 +119,7 @@ it('should validate if value is in array', () => {
 });
 
 it('should validate ip', () => {
-  const { ip } = methods;
+  const { ip } = functions;
 
   expect(ip('127.0.0.1')).toBe(true);
   expect(ip('192.168.1.1')).toBe(true);
@@ -133,14 +133,14 @@ it('should validate ip', () => {
 });
 
 it('should validate json', () => {
-  const { json } = methods;
+  const { json } = functions;
 
   expect(json('{"name": "Julia", "active": true}')).toBe(true);
   expect(json('{"name": oops}')).not.toBe(true);
 });
 
 it('should validate value below max', () => {
-  const { max } = methods;
+  const { max } = functions;
 
   expect(max(40, 50)).toBe(true);
   expect(max('short_string', 40)).toBe(true);
@@ -150,7 +150,7 @@ it('should validate value below max', () => {
 });
 
 it('should validate value above min', () => {
-  const { min } = methods;
+  const { min } = functions;
 
   expect(min(40, 20)).toBe(true);
   expect(min('short_string', 4)).toBe(true);
@@ -160,7 +160,7 @@ it('should validate value above min', () => {
 });
 
 it('should validate not equal values', () => {
-  const { not_equals } = methods;
+  const { not_equals } = functions;
 
   expect(not_equals('random_string', 'hello')).toBe(true);
   expect(not_equals(10, 20)).toBe(true);
@@ -172,7 +172,7 @@ it('should validate not equal values', () => {
 });
 
 it('should validate numeric value', () => {
-  const { numeric } = methods;
+  const { numeric } = functions;
 
   expect(numeric(10)).toBe(true);
   expect(numeric('10')).toBe(true);
@@ -184,7 +184,7 @@ it('should validate numeric value', () => {
 });
 
 it('should validate numeric value', () => {
-  const { object } = methods;
+  const { object } = functions;
 
   expect(object({})).toBe(true);
   expect(object(new Map())).toBe(true);
@@ -197,7 +197,7 @@ it('should validate numeric value', () => {
 });
 
 it('should validate value starting with another', () => {
-  const { starts_with } = methods;
+  const { starts_with } = functions;
 
   expect(starts_with('random_string', 'random_')).toBe(true);
   expect(starts_with('random_string', 'r')).toBe(true);
@@ -208,7 +208,7 @@ it('should validate value starting with another', () => {
 });
 
 it('should validate url', () => {
-  const { url } = methods;
+  const { url } = functions;
 
   expect(url('http://example.com')).toBe(true);
   expect(url('https://www.example.org')).toBe(true);
@@ -219,7 +219,7 @@ it('should validate url', () => {
 });
 
 it('should validate phone numbers', () => {
-  const { phone } = methods;
+  const { phone } = functions;
 
   expect(phone('1122334455')).toBe(true);
   expect(phone('11 22 33 44 55')).toBe(true);
@@ -230,7 +230,7 @@ it('should validate phone numbers', () => {
 });
 
 it('should validate required values', () => {
-  const { required } = methods;
+  const { required } = functions;
 
   expect(required('required_string')).toBe(true);
   expect(required(true)).toBe(true);
@@ -249,7 +249,7 @@ it('should validate required values', () => {
 });
 
 it('should validate string values', () => {
-  const { string } = methods;
+  const { string } = functions;
 
   expect(string('is_a_string')).toBe(true);
   expect(string('')).toBe(true);

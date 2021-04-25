@@ -10,7 +10,7 @@ import {
   size,
 } from 'lodash-es';
 import { messages, formatMessage } from './messages';
-import { methods } from './methods';
+import { functions } from './rules';
 import { parseScheme } from './scheme';
 
 export { setMessages, setDefaultMessage } from './messages';
@@ -28,7 +28,7 @@ export {
  * @param {string|null} message
  */
 export function extend(name, method, message = null) {
-  if (has(methods, name)) {
+  if (has(functions, name)) {
     throw `The validation method "${name}" already exists`;
   }
 
@@ -36,7 +36,7 @@ export function extend(name, method, message = null) {
     throw `The validation method must be a function, type given: ${typeof method}`;
   }
 
-  methods[name] = method;
+  functions[name] = method;
 
   if (message) {
     messages[name] = message;

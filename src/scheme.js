@@ -7,7 +7,7 @@ import {
   isString,
   mapValues,
 } from 'lodash-es';
-import { getValidationMethod } from './methods';
+import { getRuleFunction } from './rules';
 
 export let ruleSeparator = '|';
 export let ruleParamSeparator = ':';
@@ -109,9 +109,9 @@ function parseObjectRules(config) {
     if (isFunction(option)) {
       rules[name] = (value) => option(value);
     } else {
-      const params = isArray(option) ? option : [option];
-      const method = getValidationMethod(name);
-      rules[name] = (value) => method(value, params);
+      const args = isArray(option) ? option : [option];
+      const fn = getRuleFunction(name);
+      rules[name] = (value) => fn(value, ...args);
     }
   });
 
@@ -129,9 +129,9 @@ function parseStringRules(config) {
   forEach(defs, (data) => {
     const parts = data.split(ruleParamSeparator);
     const name = parts[0].trim();
-    const method = getValidationMethod(name);
+    const fn = getRuleFunction(name);
     const args = isString(parts[1]) ? parts[1].split(paramsSeparator) : [];
-    rules[name] = (value) => method(value, ...args);
+    rules[name] = (value) => fn(value, ...args);
   });
 
   return rules;
