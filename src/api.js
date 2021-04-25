@@ -3,7 +3,6 @@ import {
   first,
   forEach,
   has,
-  isArray,
   isFunction,
   isPlainObject,
   isString,
