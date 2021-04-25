@@ -80,21 +80,21 @@ function Rule(rule, params) {
  * @return {{}} Parsed rules
  */
 export function parseScheme(scheme) {
-  const ruleset = {};
-
-  Object.entries(scheme).forEach(([propName, config]) => {
+  return Object.values(scheme).map((config, propName) => {
     if (typeof config === 'string') {
-      ruleset[propName] = parseStringRules(config);
-    } else if (Array.isArray(config)) {
-      ruleset[propName] = parseArrayRules(config);
-    } else if (typeof config === 'object') {
-      ruleset[propName] = parseArrayRules(config);
-    } else {
-      throw `Invalid rules for ${propName}`;
+      return parseStringRules(config);
     }
-  });
 
-  return Object.values(ruleset);
+    if (Array.isArray(config)) {
+      return parseArrayRules(config);
+    }
+
+    if (typeof config === 'object') {
+      return parseArrayRules(config);
+    }
+
+    throw `Invalid rules for ${propName}`;
+  });
 }
 
 /**
