@@ -228,3 +228,34 @@ it('should validate phone numbers', () => {
   expect(phone(true)).not.toBe(true);
   expect(phone(1)).not.toBe(true);
 });
+
+it('should validate required values', () => {
+  const { required } = methods;
+
+  expect(required('required_string')).toBe(true);
+  expect(required(true)).toBe(true);
+  expect(required('true')).toBe(true);
+  expect(required({ name: 'James' })).toBe(true);
+  expect(required([1, 2, 3])).toBe(true);
+
+  expect(required(null)).not.toBe(true);
+  expect(required(undefined)).not.toBe(true);
+  expect(required(false)).not.toBe(true);
+  expect(required('')).not.toBe(true);
+
+  // Do not accept empty objects or arrays
+  expect(required({})).not.toBe(true);
+  expect(required([])).not.toBe(true);
+});
+
+it('should validate string values', () => {
+  const { string } = methods;
+
+  expect(string('is_a_string')).toBe(true);
+  expect(string('')).toBe(true);
+
+  expect(string(10)).not.toBe(true);
+  expect(string(true)).not.toBe(true);
+  expect(string({})).not.toBe(true);
+  expect(string([])).not.toBe(true);
+});

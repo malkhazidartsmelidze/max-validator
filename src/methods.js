@@ -246,6 +246,17 @@ export let methods = {
 
   /**
    * @param value
+   * @return {boolean|{value}}
+   */
+  required(value) {
+    if (typeof value === 'object') {
+      return (value !== null && Object.keys(value).length > 0) || { value };
+    }
+    return ![undefined, null, false, ''].includes(value) || { value };
+  },
+
+  /**
+   * @param value
    * @param prefix
    * @return {boolean|{prefix: string}}
    */
@@ -253,6 +264,14 @@ export let methods = {
     prefix = String(prefix);
     value = String(value);
     return value.indexOf(prefix) === 0 || { prefix };
+  },
+
+  /**
+   * @param value
+   * @return {boolean|{value}}
+   */
+  string(value) {
+    return typeof value === 'string' || { value };
   },
 
   /**

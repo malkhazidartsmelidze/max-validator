@@ -1,6 +1,6 @@
 import { getValidationMethod as getValidator } from './methods';
 
-const dontValidate = ['required', 'string', 'nullable', 'number'];
+const dontValidate = [];
 
 export let ruleSeparator = '|';
 export let ruleParamSeparator = ':';
@@ -70,20 +70,6 @@ export default class Rule {
    * @return {{rule: string}|boolean|*}
    */
   validate(rules, value, data) {
-    if (value === undefined || value === null || value === '') {
-      if (rules.isRequired) {
-        return { rule: 'required' };
-      } else if (rules.isNullable) {
-        return true;
-      }
-    }
-
-    if (rules.isNumber) {
-      value = parseFloat(value);
-    } else if (rules.isString) {
-      value = String(value);
-    }
-
     if (this.isInlineFunction) {
       return this.validator(value, data);
     } else {
@@ -125,21 +111,12 @@ export function parseScheme(ruleScheme) {
       throw `Invalid rules for ${name}`;
     }
 
-    let isRequired = _rules['required'] !== undefined;
-    let isString = _rules['string'] !== undefined;
-    let isNumber = _rules['number'] !== undefined;
-    let isNullable = _rules['nullable'] !== undefined;
-
     for (let i = 0; i < dontValidate.length; i++) {
       delete _rules[dontValidate[i]];
     }
 
     rules[name] = {
       rules: Object.values(_rules),
-      isRequired: isRequired,
-      isString: isString,
-      isNumber: isNumber,
-      isNullable: isNullable,
     };
   }
 
