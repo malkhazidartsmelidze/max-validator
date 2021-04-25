@@ -1,4 +1,5 @@
 import {
+  find,
   first,
   forEach,
   has,
@@ -51,18 +52,14 @@ export function extend(name, method, message = null) {
  * @returns {object}
  */
 export function validate(data, scheme, callback = null) {
-  let errors = {};
-  let failed = {};
-
   if (!isPlainObject(data) || !isPlainObject(scheme)) {
     throw 'Both data and scheme must be plain objects';
   }
 
-  let rules = parseScheme(scheme);
+  const errors = {};
+  const rules = parseScheme(scheme);
 
   forEach(rules, (checks, propName) => {
-    failed[propName] = [];
-
     forEach(checks, (checkFunction, ruleName) => {
       let result = checkFunction(data[propName]);
 
@@ -77,25 +74,25 @@ export function validate(data, scheme, callback = null) {
         err = formatMessage(ruleName, { name: propName, ...result });
       }
 
-      if (errors[propName] === undefined) {
-        errors[propName] = [err];
-      } else {
-        if (errors[propName].indexOf(err) === -1) {
-          errors[propName].push(err);
-        }
+      if (!has(errors, propName)) {
+        errors[propName] = [];
       }
 
-      failed[propName].push(ruleName);
+      errors[propName].push({
+        propName,
+        ruleName,
+        err,
+      });
     });
   });
 
-  const result = getValidationResult(errors, failed);
+  const helper = getValidationResult(errors);
 
   if (isFunction(callback)) {
-    callback(result);
+    callback(helper);
   }
 
-  return result;
+  return helper;
 }
 
 /**
@@ -111,10 +108,9 @@ export function getEmpty() {
  * Contains the errors and helpers.
  *
  * @param {object} errors
- * @param {object} failed
  * @returns {object}
  */
-function getValidationResult(errors, failed) {
+function getValidationResult(errors) {
   return {
     /**
      * @type {boolean}
@@ -134,14 +130,11 @@ function getValidationResult(errors, failed) {
      * @return {boolean}
      */
     isError(propName, ruleName = null) {
-      if (ruleName === undefined) {
-        return errors[propName] !== undefined;
-      } else {
-        return (
-          failed[propName] !== undefined &&
-          failed[propName].indexOf(ruleName) !== -1
-        );
+      if (!ruleName) {
+        return has(errors, propName);
       }
+
+      return has(errors, propName) && find(errors[propName], { ruleName });
     },
 
     /**
@@ -152,10 +145,13 @@ function getValidationResult(errors, failed) {
      * @return {string|*}
      */
     getError(propName, all = true) {
-      if (!isArray(errors[propName]) || size(errors[propName]) === 0) {
+      if (!has(errors, propName) || size(errors[propName]) === 0) {
         return '';
       }
-      return all ? errors[propName].join(',') : first(errors[propName]);
+
+      return all
+        ? errors[propName].map(({ err }) => err).join(',')
+        : first(errors[propName]).err;
     },
   };
 }
