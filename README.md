@@ -154,29 +154,17 @@ V.validate({
 
 ```javascript
 /**
- * Validates if given values is `undefined` `null` or empty string.
+ * Validates if given value is not empty
  * @message Parameter is required
  * @example ...'|required'
  */
 'required';
 
 /**
- * Tells validator to pass value in validator function as string
+ * Validates if the value is a string
  * @example ...'|string'
  */
 'string';
-
-/**
- * Tells validator to pass value in validator function as number
- * @example ...'|number'
- */
-'number';
-
-/**
- * Rule for parameter that is not required
- * @example ...'|nullable'
- */
-'nullable';
 
 /**
  * Returns error if given value is greater than given parameter, if value is not numeric compares string length
