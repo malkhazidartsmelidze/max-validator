@@ -1,3 +1,5 @@
+import { has, isArray, isPlainObject, isString, size } from './util';
+
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
@@ -31,7 +33,7 @@ export let functions = {
    * @return {boolean|{}}
    */
   array(value) {
-    return Array.isArray(value) || {};
+    return isArray(value) || {};
   },
 
   /**
@@ -41,16 +43,10 @@ export let functions = {
    * @return {{from, to, value}|boolean}
    */
   between(value, from, to) {
-    if (typeof value === 'string') {
-      if (value.length >= from && value.length <= to) {
-        return true;
-      }
-    } else {
-      if (value >= from && value <= to) {
-        return true;
-      }
+    if (isString(value)) {
+      value = value.length;
     }
-    return { from, to, value };
+    return (value >= from && value <= to) || { from, to, value };
   },
 
   /**
@@ -77,7 +73,7 @@ export let functions = {
    * @return {{value_to_contain: *}|boolean}
    */
   contains_all(value, ...values) {
-    if (!Array.isArray(value)) {
+    if (!isArray(value)) {
       value = String(value);
     }
     for (let i = 0, l = values.length; i < l; i++) {
@@ -94,7 +90,7 @@ export let functions = {
    * @return {boolean|{value_to_contain: string}}
    */
   contains_one(value, ...values) {
-    if (!Array.isArray(value)) {
+    if (!isArray(value)) {
       value = String(value);
     }
     for (let i = 0, l = values.length; i < l; i++) {
@@ -188,12 +184,7 @@ export let functions = {
    * @return {{max}|boolean}
    */
   max(value, max) {
-    if (typeof value === 'string') {
-      if (value.length <= max) return true;
-    } else if (typeof value !== undefined) {
-      if (value <= max) return true;
-    }
-    return { max };
+    return (isString(value) ? value.length : value) <= max || { max };
   },
 
   /**
@@ -202,12 +193,7 @@ export let functions = {
    * @return {{min}|boolean}
    */
   min(value, min) {
-    if (typeof value === 'string') {
-      if (value.length >= min) return true;
-    } else if (typeof value !== undefined) {
-      if (value >= min) return true;
-    }
-    return { min };
+    return (isString(value) ? value.length : value) >= min || { min };
   },
 
   /**
@@ -241,7 +227,7 @@ export let functions = {
    * @return {boolean|{value}}
    */
   object(value) {
-    return (typeof value === 'object' && !Array.isArray(value)) || { value };
+    return isPlainObject(value) || { value };
   },
 
   /**
@@ -249,8 +235,8 @@ export let functions = {
    * @return {boolean|{value}}
    */
   required(value) {
-    if (typeof value === 'object') {
-      return (value !== null && Object.keys(value).length > 0) || { value };
+    if (typeof value === 'object' && value != null) {
+      return size(value) > 0 || { value };
     }
     return ![undefined, null, false, ''].includes(value) || { value };
   },
@@ -271,7 +257,7 @@ export let functions = {
    * @return {boolean|{value}}
    */
   string(value) {
-    return typeof value === 'string' || { value };
+    return isString(value) || { value };
   },
 
   /**
@@ -293,7 +279,7 @@ export let functions = {
  * @returns {function}
  */
 export function getRuleFunction(name) {
-  if (typeof functions[name] === 'undefined') {
+  if (!has(functions, name)) {
     throw `The validation method "${name}" does not exist`;
   }
   return functions[name];

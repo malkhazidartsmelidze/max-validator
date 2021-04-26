@@ -31,6 +31,14 @@ export function isString(str) {
 }
 
 /**
+ * @param {*} num
+ * @return {boolean}
+ */
+export function isNumber(num) {
+  return typeof num === 'number';
+}
+
+/**
  * Iterates through all the object values
  * @param {object} o
  * @param {function} fn
