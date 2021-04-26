@@ -1,4 +1,4 @@
-import { reduce } from './util';
+import { has, isPlainObject, isString, reduce } from './util';
 
 /**
  * @type {string}
@@ -41,22 +41,20 @@ export let messages = {
  * @param {object} m
  */
 export function setMessages(m) {
-  if (typeof m !== 'object') {
-    throw 'Messages must be object';
+  if (!isPlainObject(m)) {
+    throw 'The messages must be an object';
   }
-
-  messages = { ...messages, ...m };
+  Object.assign(messages, m);
 }
 
 /**
- * @param {string} msg
+ * @param {string} m
  */
-export function setDefaultMessage(msg) {
-  if (typeof msg !== 'string') {
-    throw 'Default message must be a string';
+export function setDefaultMessage(m) {
+  if (!isString(m)) {
+    throw 'The default message must be a string';
   }
-
-  defaultMessage = msg;
+  defaultMessage = m;
 }
 
 /**
@@ -67,12 +65,9 @@ export function setDefaultMessage(msg) {
  * @returns {string}
  */
 export function formatMessage(name, params = {}) {
-  if (messages[name] === undefined) {
-    return defaultMessage;
+  if (has(messages, name)) {
+    // Replaces all the ":key" parts with its value
+    return reduce(params, (m, v, k) => m.replace(`:${k}`, v), messages[name]);
   }
-
-  let message = messages[name];
-
-  // Replaces all the ":key" parts with its value
-  return reduce(params, (m, v, k) => m.replace(`:${k}`, v), message);
+  return defaultMessage;
 }
