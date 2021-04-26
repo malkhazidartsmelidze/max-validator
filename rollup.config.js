@@ -1,5 +1,4 @@
 import { terser } from 'rollup-plugin-terser';
-import nodeResolve from '@rollup/plugin-node-resolve';
 import pkg from './package.json';
 
 export default {
@@ -17,5 +16,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [nodeResolve(), terser()],
+  plugins: [terser()],
 };
