@@ -133,11 +133,10 @@ function getValidationResult(errors) {
      * @return {boolean}
      */
     isError(propName, ruleName = null) {
-      if (!ruleName) {
-        return has(errors, propName);
-      }
-
-      return !!find(errors[propName], { ruleName });
+      return (
+        has(errors, propName) &&
+        (!ruleName || find(errors[propName], { ruleName }) !== undefined)
+      );
     },
 
     /**
@@ -147,13 +146,13 @@ function getValidationResult(errors) {
      * @param {boolean} all
      * @return {string|*}
      */
-    getError(propName, all = true) {
+    getError(propName, all = false) {
       if (!has(errors, propName) || size(errors[propName]) === 0) {
         return '';
       }
 
       return all
-        ? map(errors[propName], 'err').join(',')
+        ? map(errors[propName], 'err').join(', ')
         : first(errors[propName]).err;
     },
   };

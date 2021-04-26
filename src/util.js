@@ -109,9 +109,9 @@ export function keys(o) {
  */
 export function find(o, where) {
   const w = Object.entries(where);
-  return Object.values(o)
-    .filter((e) => w.length === w.filter(([k, v]) => e[k] === v).length)
-    .shift();
+  return Object.values(o).filter(
+    (e) => w.length === w.filter(([k, v]) => e[k] === v).length
+  )[0];
 }
 
 /**
