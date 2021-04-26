@@ -55,8 +55,8 @@ export function size(o) {
  * @return {object}
  */
 export function mapValues(o, fn) {
-  if (typeof fn === 'string') {
-    fn = (v) => v[fn];
+  if (isString(fn)) {
+    fn = (item) => item[fn];
   }
   return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, fn(v, k)]));
 }
@@ -102,7 +102,7 @@ export function keys(o) {
 export function find(o, where) {
   const w = Object.entries(where);
   return Object.values(o)
-    .filter((e) => w === w.filter((k, v) => e[k] === e[v]))
+    .filter((e) => w.length === w.filter(([k, v]) => e[k] === v).length)
     .shift();
 }
 

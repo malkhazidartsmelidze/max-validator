@@ -153,7 +153,7 @@ function getValidationResult(errors) {
       }
 
       return all
-        ? errors[propName].map(({ err }) => err).join(',')
+        ? map(errors[propName], 'err').join(',')
         : first(errors[propName]).err;
     },
   };
