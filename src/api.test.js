@@ -1,4 +1,4 @@
-import { validate, extend } from './Validator';
+import { validate, extend } from './api';
 
 it('should validate an object', () => {
   const data = {
@@ -45,4 +45,24 @@ it('should be extended with custom rule', () => {
 
   expect(validate({ name: 'test' }, scheme).hasError).toBe(false);
   expect(validate({ name: 'not_test' }, scheme).hasError).toBe(true);
+});
+
+it('should return a result error helper with correct data', () => {
+  const scheme = {
+    name: 'required|string|min:40|starts_with:Ga',
+    age: 'numeric',
+  };
+
+  const data = {
+    name: 'test',
+    age: 40,
+  };
+
+  expect(validate(data, scheme).isError('name')).toBe(true);
+  expect(validate(data, scheme).isError('name', true)).toBe(false);
+
+  expect(validate(data, scheme).isError('name', 'required')).toBe(false);
+  expect(validate(data, scheme).isError('name', 'string')).toBe(false);
+  expect(validate(data, scheme).isError('name', 'min')).toBe(true);
+  expect(validate(data, scheme).isError('name', 'starts_with')).toBe(true);
 });
