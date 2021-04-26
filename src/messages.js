@@ -1,4 +1,4 @@
-import { reduce } from 'lodash-es';
+import { reduce } from './util';
 
 /**
  * @type {string}

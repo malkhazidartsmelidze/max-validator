@@ -1,5 +1,5 @@
 import { parseScheme } from './scheme';
-import { keys } from 'lodash-es';
+import { keys } from './util';
 
 it('should parse schemes with strings as rules', () => {
   const scheme = {

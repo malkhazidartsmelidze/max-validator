@@ -9,7 +9,7 @@ import {
   map,
   mapValues,
   size,
-} from 'lodash-es';
+} from './util';
 import { messages, formatMessage } from './messages';
 import { functions } from './rules';
 import { parseScheme } from './scheme';
@@ -123,7 +123,7 @@ function getValidationResult(errors) {
      *
      * @type {Object}
      */
-    errors: mapValues(errors, (e) => map(e, ({ err }) => err)),
+    errors: mapValues(errors, (e) => map(e, 'err')),
 
     /**
      * Returns TRUE if the property has an error.

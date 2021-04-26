@@ -1,12 +1,11 @@
 import {
-  assign,
   forEach,
   isArray,
   isFunction,
   isPlainObject,
   isString,
   mapValues,
-} from 'lodash-es';
+} from './util';
 import { getRuleFunction } from './rules';
 
 export let ruleSeparator = '|';
@@ -18,7 +17,7 @@ export let paramsSeparator = ',';
  * @param {string} separator
  */
 export function setRuleSeparator(separator) {
-  if (isString(separator)) {
+  if (!isString(separator)) {
     throw 'Separator must be string';
   }
   ruleSeparator = separator;
@@ -29,7 +28,7 @@ export function setRuleSeparator(separator) {
  * @param {string} separator
  */
 export function setRuleParamSeparator(separator) {
-  if (isString(separator)) {
+  if (!isString(separator)) {
     throw 'Separator must be string';
   }
   ruleParamSeparator = separator;
@@ -40,7 +39,7 @@ export function setRuleParamSeparator(separator) {
  * @param {string} separator
  */
 export function setParamsSeparator(separator) {
-  if (isString(separator)) {
+  if (!isString(separator)) {
     throw 'Separator must be string';
   }
   paramsSeparator = separator;
@@ -72,11 +71,7 @@ export function parseScheme(scheme) {
 }
 
 /**
- * Parse an array of rules.
- * Can contain string or functions.
- *
  * @example ['required', 'max:20', fn() => {}]
- *
  * @param {array} config
  * @return {object}
  */
@@ -86,7 +81,7 @@ function parseArrayRules(config) {
 
   forEach(config, (rule) => {
     if (isString(rule)) {
-      assign(rules, parseStringRules(rule));
+      Object.assign(rules, parseStringRules(rule));
     } else if (isFunction(rule)) {
       rules[`anonymous_${i++}`] = rule;
     } else {
@@ -119,6 +114,7 @@ function parseObjectRules(config) {
 }
 
 /**
+ * @example 'required|min:1|max:20'
  * @param {string} config
  * @return {object}
  */
