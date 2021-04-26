@@ -58,9 +58,7 @@ export function mapValues(o, fn) {
   if (typeof fn === 'string') {
     fn = (v) => v[fn];
   }
-  return Object.fromEntries(
-    Object.entries(o).map(([k, v], i) => [i, fn(v, k)])
-  );
+  return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, fn(v, k)]));
 }
 
 /**
