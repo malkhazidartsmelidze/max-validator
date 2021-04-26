@@ -82,7 +82,7 @@ export function map(o, fn) {
  */
 export function reduce(o, fn, initial) {
   return Object.entries(o).reduce(
-    (prev, curr, i) => fn(prev, curr, i),
+    (prev, [i, curr]) => fn(prev, curr, i),
     initial
   );
 }
