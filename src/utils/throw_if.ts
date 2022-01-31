@@ -20,7 +20,7 @@
  * throw_if({}, 'ex');
  * ...
  */
-function throw_if(condition: any, message: string): void {
+export function throw_if(condition: any, message: string): void {
   if (Boolean(condition)) {
     throw message;
   }

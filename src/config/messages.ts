@@ -1,9 +1,22 @@
-type Messages = Record<string, string>;
+import { throw_if } from '../utils';
 
-export let defaultMessage: string = 'Incorrect Value';
+type DefaultMessage = string;
 
+/**
+ * Default message is fired when no message found for specific rule in messages object
+ */
+export let defaultMessage: DefaultMessage = 'Incorrect Value';
+
+export type Messages = {
+  [RuleName in AllRules]?: string;
+};
+
+/**
+ * Default error message for each rule
+ */
 export let messages: Messages = {
   required: ':name is required',
+  string: ':name must be a string',
   min: ':name cant be less than :min',
   max: ':name cant be greater than :max',
   between: ':name must be between :from and :to',
@@ -36,13 +49,18 @@ export let messages: Messages = {
  *
  * @throws {Exception}
  *
+ * @todo throw error if no validation rule exists for given message
+ *
  * @example
  * setMessages({
  *  date: 'new error message for date',
  *  number: 'new error message for number',
+ *  some_new_rule_message: 'new message for rule'
  * })
  */
-export function setMessages(newMessages: Messages): void {
+export function setMessages(
+  newMessages: Messages | Record<string, string>
+): void {
   throw_if(typeof newMessages !== 'object', 'Messages must be object');
 
   /**
@@ -52,7 +70,6 @@ export function setMessages(newMessages: Messages): void {
     setMessage(rule, newMessages[rule]);
   }
 }
-
 /**
  * Set single rule message
  *
@@ -61,7 +78,7 @@ export function setMessages(newMessages: Messages): void {
  * @example
  * setMessage('number', 'new error message for number')
  */
-export function setMessage(rule: string, message: string): void {
+export function setMessage(rule: AllRules | string, message: string): void {
   throw_if(typeof rule !== 'string', 'Invalid rule name');
   throw_if(typeof message !== 'string', 'Invalid message');
 
@@ -77,8 +94,19 @@ export function setMessage(rule: string, message: string): void {
  * @example
  * setDefaultMessage('some error happened')
  */
-export function setDefaultMessage(msg: string): void {
+export function setDefaultMessage(msg: DefaultMessage): void {
   throw_if(typeof msg !== 'string', 'Default message must be a string');
 
   defaultMessage = msg;
+}
+
+/**
+ * Get message for given rule
+ */
+export function getMessage(rule_name: string): string {
+  if (typeof messages[rule_name] !== undefined) {
+    return messages[rule_name];
+  }
+
+  return defaultMessage;
 }
