@@ -36,10 +36,12 @@ export let messages = {
 };
 
 /**
- * @param {object} m
+ * Override multiple messages at once
+ *
+ * @param {object} newMessages
  */
-export function setMessages(m) {
-  if (typeof m !== 'object') {
+export function setMessages(newMessages) {
+  if (typeof newMessages !== 'object') {
     throw 'Messages must be object';
   }
 
@@ -47,6 +49,8 @@ export function setMessages(m) {
 }
 
 /**
+ * Override default message
+ *
  * @param {string} msg
  */
 export function setDefaultMessage(msg) {

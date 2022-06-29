@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "prepublishOnly": "rm dist/* -f && npm run build",
-    "build": "rollup -c",
+    "build": "rollup index.js -c",
     "test": "jest"
   },
   "repository": "git+https://github.com/malkhazidartsmelidze/max-validator.git",

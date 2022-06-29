@@ -103,7 +103,7 @@ export function getEmpty() {
  * @param {function?} callback
  * @returns {object}
  */
-export function validate(data, scheme, callback) {
+export function validate(data, scheme, callback = function () {}) {
   let errors = {};
   let failedRules = {};
 
