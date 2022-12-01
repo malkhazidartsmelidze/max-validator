@@ -2,12 +2,15 @@ import { messages, defaultMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './Rule';
 
-export { setMessages, setDefaultMessage } from './messages';
 export {
+  setMessages,
+  setDefaultMessage,
   setRuleSeparator,
   setRuleParamSeparator,
   setParamsSeparator,
-} from './Rule';
+} from './config';
+
+export * as config from './config';
 
 /**
  * Extends `Validator` by adding new validation methods.

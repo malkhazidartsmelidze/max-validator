@@ -1,27 +1,41 @@
-/**
- * @deprecated will pe depracated in v1.4 use V.config.defaultMessage instead
- */
-export { defaultMessage } from './config';
+import {
+  defaultMessage,
+  messages as new_messages,
+  setMessages as new_setMessages,
+  setDefaultMessage as new_setDefaultMessage,
+  setMessage as new_setMessage,
+} from './config';
 
 /**
- * @deprecated will pe depracated in v1.4 use V.config.messages instead
+ * @deprecated will be removed in next version use `V.config.messages` instead
  */
-export { messages } from './config';
+const messages = new_messages;
 
 /**
- * @deprecated will pe depracated in v1.4 use V.config.setMessages instead
+ * @deprecated will be removed in next version use `V.config.setMessages` instead
  * @function
  */
-export { setMessages } from './config';
+const setMessages = new_setMessages;
 
 /**
- * @deprecated will pe depracated in v1.4 use V.config.setDefaultMessage instead
+ * @deprecated will be removed in next version use `V.config.setDefaultMessage` instead
  * @function
  */
-export { setDefaultMessage } from './config';
+const setDefaultMessage = new_setDefaultMessage;
 
 /**
  * @since 1.3
  * @function
  */
-export { setMessage } from './config';
+const setMessage = new_setMessage;
+
+export {
+  /**
+   * @deprecated
+   */
+  defaultMessage,
+  messages,
+  setMessages,
+  setDefaultMessage,
+  setMessage,
+};

@@ -1,8 +1,4 @@
-/**
- * @todo:
- * 1. Move defaultMessage in messages.default
- * 2. Move separators in single object
- */
+import { throw_if } from './utils';
 
 /**
  * @type {string}
@@ -95,11 +91,14 @@ export function setParamsSeparator(separator) {
  * @param {object} newMessages
  */
 export function setMessages(newMessages) {
-  if (typeof newMessages !== 'object') {
-    throw 'Messages must be object';
-  }
+  throw_if(typeof newMessages !== 'object', 'Messages must be object');
 
-  messages = { ...messages, ...newMessages };
+  /**
+   * Loop over new messages and change one by one
+   */
+  for (let rule in newMessages) {
+    setMessage(rule, newMessages[rule]);
+  }
 }
 
 /**
@@ -109,9 +108,10 @@ export function setMessages(newMessages) {
  * @param {string} message
  */
 export function setMessage(rule, message) {
-  if (typeof rule !== 'string' || typeof message !== 'string') {
-    throw_if();
-  }
+  throw_if(typeof rule !== 'string', 'Invalid rule name');
+  throw_if(typeof message !== 'string', 'Invalid message');
+
+  messages[rule] = message;
 }
 
 /**
