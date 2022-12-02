@@ -9,6 +9,7 @@ import {
   setMessage,
   setDefaultMessage,
 } from '../src/messages';
+import V from '../index';
 
 it('should replace the default error message', () => {
   setDefaultMessage('Custom error message');
@@ -37,7 +38,10 @@ it('should merge/replace messages', () => {
   // expects only string as message
   expect(() => setMessages({ replace_rule: 1234 })).toThrowError();
 
-  /** @todo validate and check if returns changed message */
+  // Validate and test error message
+  V.extend('replace_rule', () => false); // Create new rule, which always fails
+  const result = V.validate({ test: 'data' }, { test: 'replace_rule' });
+  expect(result.errors.test[0]).toBe(test_message);
 });
 
 it('should replace/add message in messages object', () => {
@@ -52,5 +56,8 @@ it('should replace/add message in messages object', () => {
   expect(Object.keys(messages)).toContain('new_rule');
   expect(messages.new_rule).toBe(test_message);
 
-  /** @todo validate and check if returns changed message */
+  // Validate and test error message
+  V.extend('new_rule', () => false); // Create new rule, which always fails
+  const result = V.validate({ test: 'data' }, { test: 'new_rule' });
+  expect(result.errors.test[0]).toBe(test_message);
 });
