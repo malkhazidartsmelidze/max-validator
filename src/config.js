@@ -57,9 +57,8 @@ export let messages = {
  * @param {string} separator
  */
 export function setRuleSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
+  throw_if(typeof separator !== 'string', 'Separator must be string');
+
   ruleSeparator = separator;
 }
 
@@ -68,9 +67,7 @@ export function setRuleSeparator(separator) {
  * @param {string} separator
  */
 export function setRuleParamSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
+  throw_if(typeof separator !== 'string', 'Separator must be string');
   ruleParamSeparator = separator;
 }
 
@@ -79,9 +76,8 @@ export function setRuleParamSeparator(separator) {
  * @param {string} separator
  */
 export function setParamsSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
+  throw_if(typeof separator !== 'string', 'Separator must be string');
+
   paramsSeparator = separator;
 }
 
@@ -120,9 +116,7 @@ export function setMessage(rule, message) {
  * @param {string} msg
  */
 export function setDefaultMessage(msg) {
-  if (typeof msg !== 'string') {
-    throw 'Default message must be a string';
-  }
+  throw_if(typeof msg !== 'string', 'Default message must be a string');
 
   defaultMessage = msg;
 }

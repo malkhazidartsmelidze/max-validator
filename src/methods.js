@@ -1,3 +1,5 @@
+import { throw_if } from './utils';
+
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
@@ -449,8 +451,9 @@ export let methods = {
  * @returns {function}
  */
 export function getValidationMethod(name) {
-  if (methods.hasOwnProperty(name) === false) {
-    throw `The validation method "${name}" does not exist`;
-  }
+  throw_if(
+    methods.hasOwnProperty(name) === false,
+    `The validation method "${name}" does not exist`
+  );
   return methods[name];
 }

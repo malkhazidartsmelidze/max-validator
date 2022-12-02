@@ -11,9 +11,8 @@ export let paramsSeparator = ',';
  * @param {string} separator
  */
 export function setRuleSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
+  throw_if(typeof separator !== 'string', 'Separator must be string');
+
   ruleSeparator = separator;
 }
 
@@ -22,9 +21,8 @@ export function setRuleSeparator(separator) {
  * @param {string} separator
  */
 export function setRuleParamSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
+  throw_if(typeof separator !== 'string', 'Separator must be string');
+
   ruleParamSeparator = separator;
 }
 
@@ -33,9 +31,8 @@ export function setRuleParamSeparator(separator) {
  * @param {string} separator
  */
 export function setParamsSeparator(separator) {
-  if (typeof separator !== 'string') {
-    throw 'Separator must be string';
-  }
+  throw_if(typeof separator !== 'string', 'Separator must be string');
+
   paramsSeparator = separator;
 }
 

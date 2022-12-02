@@ -1,6 +1,7 @@
 import { messages, defaultMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './Rule';
+import { throw_if } from './utils';
 
 export {
   setMessages,
@@ -20,13 +21,15 @@ export * as config from './config';
  * @param {string|null} message
  */
 export function extend(name, method, message = null) {
-  if (methods.hasOwnProperty(name)) {
-    throw `The validation method "${name}" already exists`;
-  }
+  throw_if(
+    methods.hasOwnProperty(name),
+    `The validation method "${name}" already exists`
+  );
 
-  if (typeof method !== 'function') {
-    throw 'The validation method must be function';
-  }
+  throw_if(
+    typeof method !== 'function',
+    'The validation method must be function'
+  );
 
   methods[name] = method;
 
@@ -110,9 +113,10 @@ export function validate(data, scheme, callback = function () {}) {
   let errors = {};
   let failedRules = {};
 
-  if (typeof data !== 'object' || typeof scheme !== 'object') {
-    throw 'Both data and scheme must be object';
-  }
+  throw_if(
+    typeof data !== 'object' || typeof scheme !== 'object',
+    'Both data and scheme must be object'
+  );
 
   let rules = parseScheme(scheme);
 
