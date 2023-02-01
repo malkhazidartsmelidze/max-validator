@@ -1,5 +1,4 @@
  - Move config defaultMessage in messages.default 
- - Move config separators in single object
  - More validations and checks in code
    - Object Validation
    - String Validation

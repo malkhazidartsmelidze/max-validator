@@ -6,7 +6,7 @@
 - [Aviable Validation Rules](#aviable-validation-rules)
 - [Use With React.js](#use-with-react.js)
 - [Messages](#messages)
-- [Change rule separators](#change-rule-separators)
+- [Change rule splitters](#change-rule-splitters)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -380,7 +380,9 @@ function registerForm(props) {
       values: {
         ...formState.values,
         [event.target.name]:
-          event.target.type === 'checkbox' ? event.target.checked : event.target.value,
+          event.target.type === 'checkbox'
+            ? event.target.checked
+            : event.target.value,
       },
       touched: {
         ...formState.touched,
@@ -405,51 +407,54 @@ function registerForm(props) {
 
   return (
     <form>
-      <label htmlFor='name'>Name</label>
+      <label htmlFor="name">Name</label>
       <input
-        type='text'
+        type="text"
         className={hasErr('name') ? 'error' : ''}
-        name='name'
+        name="name"
         value={formState.values.name}
         onChange={handleChange}
       />
 
-      <label htmlFor='lastname'>Last Name</label>
+      <label htmlFor="lastname">Last Name</label>
       <input
-        type='text'
+        type="text"
         className={hasErr('lastname') ? 'error' : ''}
-        name='lastname'
+        name="lastname"
         value={formState.values.lastname}
         onChange={handleChange}
       />
 
-      <label htmlFor='lastname'>Email</label>
+      <label htmlFor="lastname">Email</label>
       <input
-        type='mail'
+        type="mail"
         className={hasErr('email') ? 'error' : ''}
-        name='email'
+        name="email"
         value={formState.values.email}
         onChange={handleChange}
       />
 
-      <label htmlFor='lastname'>Gender</label>
+      <label htmlFor="lastname">Gender</label>
       <select
-        name='gender'
+        name="gender"
         className={hasErr('gender') ? 'error' : ''}
         value={formState.values.gender}
         onChange={handleChange}
       >
-        <option value='male'>Male</option>
-        <option value='female'>Female</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
       </select>
 
-      <label htmlFor='lastname' className={hasErr('accept_policy') ? 'error' : ''}>
+      <label
+        htmlFor="lastname"
+        className={hasErr('accept_policy') ? 'error' : ''}
+      >
         I accept terms and conditions
       </label>
       <input
-        type='checkbox'
+        type="checkbox"
         value={formState.values.accept_policy}
-        name='accept_policy'
+        name="accept_policy"
         onChange={handleChange}
       />
     </form>

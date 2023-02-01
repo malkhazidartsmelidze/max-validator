@@ -1,13 +1,20 @@
 import { getValidationMethod as getValidator } from './methods';
 import * as config from './config';
 
+/**
+ * Rules that are type hints and doesn't need to validate
+ * These rules are resolved before data is passed to validator for validation
+ * @type {Array}
+ */
 const dontValidate = ['required', 'string', 'nullable', 'number'];
+
+const schemeParser = () => {};
 
 /**
  * @class Rule
  * @param {string} rule
  */
-export default class Rule {
+export default class Rudle {
   /**
    * @param {string|function} rule
    */
@@ -188,11 +195,13 @@ function parseStringRules(ruleSet) {
  * @function
  */
 const new_setRuleSeparator = config.setRuleSeparator;
+
 /**
  * @deprecated will be removed in 2.0, use `V.config.setRuleParamSeparator` instead
  * @function
  */
 const new_setRuleParamSeparator = config.setRuleParamSeparator;
+
 /**
  * @deprecated will be removed in 2.0, use `V.config.setParamsSeparator` instead
  * @function
@@ -222,3 +231,25 @@ export {
   new_setRuleParamSeparator as setRuleParamSeparator,
   new_setParamsSeparator as setParamsSeparator,
 };
+
+/**
+ * Define rule type
+ * @typedef Rule
+ *
+ * @property {Function} validator
+ * @property {String} message
+ * @property {any} data
+ * @property {Array<any>} params
+ */
+
+/**
+ * Define rule type
+ * @typedef Scheme
+ * @type {Record<String, Rule>}
+ */
+
+/**
+ * @type {Scheme}
+ */
+const ee = null;
+ee.as.data;

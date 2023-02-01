@@ -1,29 +1,8 @@
-import { throw_if } from './utils';
+type Messages = Record<string, string>;
 
-/**
- * @type {string}
- */
-export let ruleSeparator = '|';
+export let defaultMessage: string = 'Incorrect Value';
 
-/**
- * @type {string}
- */
-export let ruleParamSeparator = ':';
-
-/**
- * @type {string}
- */
-export let paramsSeparator = ',';
-
-/**
- * @type {string}
- */
-export let defaultMessage = 'Incorrect Value';
-
-/**
- * @type {*}
- */
-export let messages = {
+export let messages: Messages = {
   required: ':name is required',
   min: ':name cant be less than :min',
   max: ':name cant be greater than :max',
@@ -53,41 +32,17 @@ export let messages = {
 };
 
 /**
- * Override default rule separator
- * @param {string} separator
- */
-export function setRuleSeparator(separator) {
-  throw_if(typeof separator !== 'string', 'Separator must be string');
-
-  ruleSeparator = separator;
-}
-
-/**
- * Override default rule-params separator
- * @param {string} separator
- */
-export function setRuleParamSeparator(separator) {
-  throw_if(typeof separator !== 'string', 'Separator must be string');
-
-  ruleParamSeparator = separator;
-}
-
-/**
- * Override default params separator
- * @param {string} separator
- */
-export function setParamsSeparator(separator) {
-  throw_if(typeof separator !== 'string', 'Separator must be string');
-
-  paramsSeparator = separator;
-}
-
-/**
- * Override multiple messages at once
+ * Override Or add multiple messages at once
  *
- * @param {object} newMessages
+ * @throws {Exception}
+ *
+ * @example
+ * setMessages({
+ *  date: 'new error message for date',
+ *  number: 'new error message for number',
+ * })
  */
-export function setMessages(newMessages) {
+export function setMessages(newMessages: Messages): void {
   throw_if(typeof newMessages !== 'object', 'Messages must be object');
 
   /**
@@ -99,12 +54,14 @@ export function setMessages(newMessages) {
 }
 
 /**
- * Set rule message
+ * Set single rule message
  *
- * @param {string} rule
- * @param {string} message
+ * @throws {Exception}
+ *
+ * @example
+ * setMessage('number', 'new error message for number')
  */
-export function setMessage(rule, message) {
+export function setMessage(rule: string, message: string): void {
   throw_if(typeof rule !== 'string', 'Invalid rule name');
   throw_if(typeof message !== 'string', 'Invalid message');
 
@@ -112,11 +69,15 @@ export function setMessage(rule, message) {
 }
 
 /**
- * Override default message
+ * Set new default message,
+ * default message is fired if no message is found for specific rule
  *
- * @param {string} msg
+ * @throws {Exception}
+ *
+ * @example
+ * setDefaultMessage('some error happened')
  */
-export function setDefaultMessage(msg) {
+export function setDefaultMessage(msg: string): void {
   throw_if(typeof msg !== 'string', 'Default message must be a string');
 
   defaultMessage = msg;
