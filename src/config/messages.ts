@@ -104,9 +104,12 @@ export function setDefaultMessage(msg: DefaultMessage): void {
  * Get message for given rule
  */
 export function getMessage(rule_name: string): string {
+  // if error message is defined for given rule, it will be returned
   if (typeof messages[rule_name] !== undefined) {
     return messages[rule_name];
   }
 
+  // if not defined the error message in message object,
+  // then default message is returned
   return defaultMessage;
 }
