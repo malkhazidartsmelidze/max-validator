@@ -1,3 +1,5 @@
+import { throw_if } from '../utils';
+
 interface SplitterSymbols {
   /**
    * The symbol, that separates each validation rule

@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "sourceMap": true
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "declaration": true,
+    "outDir": "./dist"
   },
   "include": [
       "src/**/*"
