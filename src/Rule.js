@@ -1,40 +1,7 @@
 import { getValidationMethod as getValidator } from './methods';
+import * as config from './config';
 
 const dontValidate = ['required', 'string', 'nullable', 'number'];
-
-export let ruleSeparator = '|';
-export let ruleParamSeparator = ':';
-export let paramsSeparator = ',';
-
-/**
- * Override default rule separator
- * @param {string} separator
- */
-export function setRuleSeparator(separator) {
-  throw_if(typeof separator !== 'string', 'Separator must be string');
-
-  ruleSeparator = separator;
-}
-
-/**
- * Override default rule-params separator
- * @param {string} separator
- */
-export function setRuleParamSeparator(separator) {
-  throw_if(typeof separator !== 'string', 'Separator must be string');
-
-  ruleParamSeparator = separator;
-}
-
-/**
- * Override default params separator
- * @param {string} separator
- */
-export function setParamsSeparator(separator) {
-  throw_if(typeof separator !== 'string', 'Separator must be string');
-
-  paramsSeparator = separator;
-}
 
 /**
  * @class Rule
@@ -195,23 +162,63 @@ function parseObjectRules(ruleSet) {
  */
 function parseStringRules(ruleSet) {
   let rules = {};
-  let allRules = ruleSet.split(ruleSeparator);
+  let allRules = ruleSet.split(config.ruleSeparator);
 
   allRules
     .filter(function (val) {
       return val !== '';
     })
     .map(function (r) {
-      let _ruleParams = r.split(ruleParamSeparator);
+      let _ruleParams = r.split(config.ruleParamSeparator);
       let _ruleName = _ruleParams[0].trim();
       let rule = new Rule(_ruleName);
 
       let _params = _ruleParams[1];
       let _function_params =
-        _params !== undefined ? _params.split(paramsSeparator) : [];
+        _params !== undefined ? _params.split(config.paramsSeparator) : [];
       rule.setParams(_function_params);
       rules[_ruleName] = rule;
     });
 
   return rules;
 }
+
+/**
+ * @deprecated will be removed in 1.4, use `V.config.setRuleSeparator` instead
+ * @function
+ */
+const new_setRuleSeparator = config.setRuleSeparator;
+/**
+ * @deprecated will be removed in 1.4, use `V.config.setRuleParamSeparator` instead
+ * @function
+ */
+const new_setRuleParamSeparator = config.setRuleParamSeparator;
+/**
+ * @deprecated will be removed in 1.4, use `V.config.setParamsSeparator` instead
+ * @function
+ */
+const new_setParamsSeparator = config.setParamsSeparator;
+
+/**
+ * @deprecated will be removed in 1.4, use `V.config.ruleSeparator` instead
+ */
+const ruleSeparator = config.ruleSeparator;
+
+/**
+ * @deprecated will be removed in 1.4, use `V.config.ruleParamSeparator` instead
+ */
+const ruleParamSeparator = config.ruleParamSeparator;
+
+/**
+ * @deprecated will be removed in 1.4, use `V.config.paramsSeparator` instead
+ */
+const paramsSeparator = config.paramsSeparator;
+
+export {
+  ruleSeparator,
+  ruleParamSeparator,
+  paramsSeparator,
+  new_setRuleSeparator as setRuleSeparator,
+  new_setRuleParamSeparator as setRuleParamSeparator,
+  new_setParamsSeparator as setParamsSeparator,
+};

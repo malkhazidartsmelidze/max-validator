@@ -1,9 +1,10 @@
-import { messages, defaultMessage } from './messages';
 import { methods } from './methods';
 import { parseScheme } from './Rule';
 import { throw_if } from './utils';
 
 export {
+  messages,
+  defaultMessage,
   setMessages,
   setDefaultMessage,
   setRuleSeparator,

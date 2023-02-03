@@ -68,6 +68,7 @@ export function setRuleSeparator(separator) {
  */
 export function setRuleParamSeparator(separator) {
   throw_if(typeof separator !== 'string', 'Separator must be string');
+
   ruleParamSeparator = separator;
 }
 
