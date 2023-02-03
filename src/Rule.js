@@ -1,4 +1,4 @@
-import { getValidationMethod as getValidator } from './methods';
+import { getValidationMethod as getValidator } from './validators/methods';
 import * as config from './config';
 
 /**

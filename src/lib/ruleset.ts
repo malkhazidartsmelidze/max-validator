@@ -1,7 +1,7 @@
 import { splitters } from '../config';
 import { throw_if } from '../utils';
 import {
-  create_rule_from_params,
+  get_rule_by_name,
   ParsedRule,
   parse_function_rule,
   parse_rule,
@@ -108,7 +108,7 @@ function parse_object_ruleset(ruleset: ObjectRuleSet): Array<ParsedRule> {
     if (typeof rule === 'function') {
       parsed_rules.push(parse_function_rule(rule, rule_name));
     } else {
-      parsed_rules.push(create_rule_from_params(rule, ruleset[rule_name]));
+      parsed_rules.push(get_rule_by_name(rule, ruleset[rule_name]));
     }
   }
 

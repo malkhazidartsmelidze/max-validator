@@ -1,4 +1,4 @@
-import { methods } from '../src/methods';
+import { methods } from '../src/validators/methods';
 
 it('should validate alpha/numeric characters', () => {
   const { alpha, alpha_dash, alpha_numeric } = methods;

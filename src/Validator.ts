@@ -1,5 +1,5 @@
 import * as config from './config';
-import { methods } from './methods';
+import { methods } from './validators/methods';
 import { parseScheme } from './Rule';
 import { throw_if } from './utils';
 

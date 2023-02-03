@@ -1,6 +1,7 @@
 import { messages, splitters } from '../config';
 import { getMessage } from '../config/messages';
 import { throw_if } from '../utils';
+import { getValidationMethod } from '../validators/validators';
 
 /**
  * Rulesets are set of individual rules, no matter it is string, object or other type
@@ -83,33 +84,33 @@ function parse_string_rule(rule: string): ParsedRule {
       .filter((val) => val);
   }
 
-  return create_rule_from_params(rule_name, params);
+  return get_rule_by_name(rule_name, params);
 }
 
 /**
  * This function finds rule and its params and creates ParsedRule of that parameters
  */
-export function create_rule_from_params(
+export function get_rule_by_name(
   rule_name: string,
-  params: any
+  rule_params: any
 ): ParsedRule {
   let parsed_rule = {
     type: 'rule',
   } as ParsedRule;
 
-  // @todo refactor
-  parsed_rule.validator = () => rule_name;
+  // Get validation rule
+  parsed_rule.validator = getValidationMethod(rule_name);
 
   // If params is passed as array
   // Then add params to ParsedRule
-  if (Array.isArray(params)) {
-    parsed_rule.params = params as Array<any>;
+  if (Array.isArray(rule_params)) {
+    parsed_rule.params = rule_params as Array<any>;
   }
 
   // If params is function that means that this type of ruleset is passed
   // {some_custom_rule: () => true }
-  else if (typeof params === 'function') {
-    parsed_rule.validator = params;
+  else if (typeof rule_params === 'function') {
+    parsed_rule.validator = rule_params;
   }
 
   // if found simple_rule declaration then this sets in the ruleset
@@ -153,7 +154,8 @@ export function parse_function_rule(
 
 /**
  * This is called when object is passed as a validator
- * for example:
+ * @example
+ * // for example:
  * ["required", "min:5", {
  *  validator: some_custom_function,
  *  message: 'Some custom error message',
