@@ -105,6 +105,7 @@ export function create_rule_from_params(
   if (Array.isArray(params)) {
     parsed_rule.params = params as Array<any>;
   }
+
   // If params is function that means that this type of ruleset is passed
   // {some_custom_rule: () => true }
   else if (typeof params === 'function') {
@@ -130,13 +131,22 @@ export function create_rule_from_params(
  *  // Some custom code here
  * }]
  */
-function parse_function_rule(rule: Function): ParsedRule {
+export function parse_function_rule(
+  rule: Function,
+  rule_name?: string
+): ParsedRule {
+  // Get rule message if given rule name
+  let message = null;
+  if (rule_name) {
+    message = getMessage(rule_name);
+  }
+
   return {
     // set type as inline function
     type: 'inline_func',
     // set this function as validator
     validator: rule,
-    message: null,
+    message: message,
     params: null,
   };
 }

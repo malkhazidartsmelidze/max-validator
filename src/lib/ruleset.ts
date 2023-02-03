@@ -1,6 +1,12 @@
 import { splitters } from '../config';
 import { throw_if } from '../utils';
-import { create_rule_from_params, ParsedRule, parse_rule, Rule } from './rule';
+import {
+  create_rule_from_params,
+  ParsedRule,
+  parse_function_rule,
+  parse_rule,
+  Rule,
+} from './rule';
 
 /**
  * Given rules for each data can be following
@@ -96,7 +102,14 @@ function parse_object_ruleset(ruleset: ObjectRuleSet): Array<ParsedRule> {
 
   // For each key in object
   for (let rule_name in ruleset) {
-    parsed_rules.push(create_rule_from_params(rule_name, ruleset[rule_name]));
+    const rule = ruleset[rule_name];
+
+    // if object value is function
+    if (typeof rule === 'function') {
+      parsed_rules.push(parse_function_rule(rule, rule_name));
+    } else {
+      parsed_rules.push(create_rule_from_params(rule, ruleset[rule_name]));
+    }
   }
 
   return parsed_rules;
