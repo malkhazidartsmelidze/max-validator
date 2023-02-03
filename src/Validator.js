@@ -1,3 +1,4 @@
+import * as config from './config';
 import { methods } from './methods';
 import { parseScheme } from './Rule';
 import { throw_if } from './utils';
@@ -35,7 +36,7 @@ export function extend(name, method, message = null) {
   methods[name] = method;
 
   if (message) {
-    messages[name] = message;
+    config.setMessage(name, message);
   }
 }
 
@@ -52,11 +53,11 @@ export function formatMessage(name, params, ruleName) {
   }
   params.name = name;
 
-  if (messages[ruleName] === undefined) {
-    return defaultMessage;
+  if (config.messages[ruleName] === undefined) {
+    return config.defaultMessage;
   }
 
-  let message = messages[ruleName];
+  let message = config.messages[ruleName];
 
   Object.keys(params).map(function (key) {
     message = message.replace(':' + key, params[key]);

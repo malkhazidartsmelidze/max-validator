@@ -184,33 +184,33 @@ function parseStringRules(ruleSet) {
 }
 
 /**
- * @deprecated will be removed in 1.4, use `V.config.setRuleSeparator` instead
+ * @deprecated will be removed in 2.0, use `V.config.setRuleSeparator` instead
  * @function
  */
 const new_setRuleSeparator = config.setRuleSeparator;
 /**
- * @deprecated will be removed in 1.4, use `V.config.setRuleParamSeparator` instead
+ * @deprecated will be removed in 2.0, use `V.config.setRuleParamSeparator` instead
  * @function
  */
 const new_setRuleParamSeparator = config.setRuleParamSeparator;
 /**
- * @deprecated will be removed in 1.4, use `V.config.setParamsSeparator` instead
+ * @deprecated will be removed in 2.0, use `V.config.setParamsSeparator` instead
  * @function
  */
 const new_setParamsSeparator = config.setParamsSeparator;
 
 /**
- * @deprecated will be removed in 1.4, use `V.config.ruleSeparator` instead
+ * @deprecated will be removed in 2.0, use `V.config.ruleSeparator` instead
  */
 const ruleSeparator = config.ruleSeparator;
 
 /**
- * @deprecated will be removed in 1.4, use `V.config.ruleParamSeparator` instead
+ * @deprecated will be removed in 2.0, use `V.config.ruleParamSeparator` instead
  */
 const ruleParamSeparator = config.ruleParamSeparator;
 
 /**
- * @deprecated will be removed in 1.4, use `V.config.paramsSeparator` instead
+ * @deprecated will be removed in 2.0, use `V.config.paramsSeparator` instead
  */
 const paramsSeparator = config.paramsSeparator;
 

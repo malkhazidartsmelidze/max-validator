@@ -1,6 +1,6 @@
 /**
  * Test deprecated messages,
- * Will be removed in next (1.4) version
+ * Will be removed in next (2.0) version
  */
 import {
   messages,
