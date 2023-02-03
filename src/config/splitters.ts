@@ -1,6 +1,6 @@
 import { throw_if } from '../utils';
 
-interface SplitterSymbols {
+type SplitterSymbols = {
   /**
    * The symbol, that separates each validation rule
    * Can be any type of string
@@ -30,7 +30,7 @@ interface SplitterSymbols {
    * "required|string|between:5/10" // "/" is used as a rule splitter
    */
   paramsSplitter: string;
-}
+};
 
 /**
  * Create new splitters object with default values

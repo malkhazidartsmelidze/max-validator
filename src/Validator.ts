@@ -8,9 +8,9 @@ export {
   defaultMessage,
   setMessages,
   setDefaultMessage,
-  setRuleSeparator,
-  setRuleParamSeparator,
-  setParamsSeparator,
+  setRuleSplitter,
+  setRuleParamSplitter,
+  setParamsSplitter,
 } from './config';
 
 export * as config from './config';
@@ -100,7 +100,7 @@ export function formatErrors(errors, failedRules) {
  * @return {object}
  */
 export function getEmpty() {
-  return validate({}, {});
+  return validate({}, {}, null);
 }
 
 /**
@@ -111,7 +111,7 @@ export function getEmpty() {
  * @param {function?} callback
  * @returns {object}
  */
-export function validate(data, scheme, callback = function () {}) {
+export function validate(data, scheme, callback) {
   let errors = {};
   let failedRules = {};
 

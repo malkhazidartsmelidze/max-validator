@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es2015",
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "moduleResolution": "node"
   },
+  "moduleResolution": "node",
   "include": [
       "src/**/*"
   ],
   "exclude": [
-      "node_modules",
+      "node_modules"
   ]
 }

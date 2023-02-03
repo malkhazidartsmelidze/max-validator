@@ -1,9 +1,10 @@
 import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
+import tsc from './tsconfig.json';
 
 export default {
-  input: 'index.js',
+  input: 'index.ts',
   output: [
     {
       file: pkg.main,
@@ -17,5 +18,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [terser(), typescript()],
+  plugins: [typescript(tsc), terser()],
 };
