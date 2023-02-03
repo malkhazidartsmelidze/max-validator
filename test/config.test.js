@@ -57,3 +57,17 @@ it('Should create new rule message and validate it', () => {
   expect(V.config.messages.new_rule2).toBe('new_rule2');
   expect(V.config.messages.new_rule3).toBe('new_rule3');
 });
+
+it('Should test if splitter setting works', () => {
+  // Test param splitter
+  V.config.setParamsSplitter('T');
+  expect(V.config.splitters.paramsSplitter).toBe('T');
+
+  // Test param value splitter
+  V.config.setRuleParamSplitter('TT');
+  expect(V.config.splitters.ruleParamSplitter).toBe('TT');
+
+  // Test rule splitter
+  V.config.setRuleSplitter('RS');
+  expect(V.config.splitters.ruleSplitter).toBe('RS');
+});

@@ -14,7 +14,7 @@ const schemeParser = () => {};
  * @class Rule
  * @param {string} rule
  */
-export default class Rudle {
+export default class Rule {
   /**
    * @param {string|function} rule
    */
@@ -247,9 +247,3 @@ export {
  * @typedef Scheme
  * @type {Record<String, Rule>}
  */
-
-/**
- * @type {Scheme}
- */
-const ee = null;
-ee.as.data;
