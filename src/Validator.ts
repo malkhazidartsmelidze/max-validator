@@ -1,8 +1,6 @@
 import * as config from './config';
-import { methods } from './validators/methods';
 import { parseScheme } from './Rule';
 import { throw_if } from './utils';
-
 export {
   messages,
   defaultMessage,
@@ -13,32 +11,9 @@ export {
   setParamsSplitter,
 } from './config';
 
+export { extend } from './validators';
+
 export * as config from './config';
-
-/**
- * Extends `Validator` by adding new validation methods.
- *
- * @param {string} name
- * @param {function} method
- * @param {string|null} message
- */
-export function extend(name, method, message = null) {
-  throw_if(
-    methods.hasOwnProperty(name),
-    `The validation method "${name}" already exists`
-  );
-
-  throw_if(
-    typeof method !== 'function',
-    'The validation method must be function'
-  );
-
-  methods[name] = method;
-
-  if (message) {
-    config.setMessage(name, message);
-  }
-}
 
 /**
  * Format Validation Messages
