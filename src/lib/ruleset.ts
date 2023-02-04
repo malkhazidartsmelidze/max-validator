@@ -108,9 +108,17 @@ function parse_object_ruleset(ruleset: ObjectRuleSet): Array<ParsedRule> {
     if (typeof rule === 'function') {
       parsed_rules.push(parse_function_rule(rule, rule_name));
     } else {
-      parsed_rules.push(get_rule_by_name(rule, ruleset[rule_name]));
+      parsed_rules.push(get_rule_by_name(rule_name, ruleset[rule_name]));
     }
   }
 
   return parsed_rules;
+}
+
+// Exports only when testing
+if (process.env.NODE_ENV === 'test') {
+  module.exports.parse_ruleset = parse_ruleset;
+  module.exports.parse_string_ruleset = parse_string_ruleset;
+  module.exports.parse_array_ruleset = parse_array_ruleset;
+  module.exports.parse_object_ruleset = parse_object_ruleset;
 }

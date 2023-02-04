@@ -84,7 +84,7 @@ function parse_string_rule(rule: string): ParsedRule {
       .filter((val) => val);
   }
 
-  return get_rule_by_name(rule_name, params);
+  return get_rule_by_name(rule_name, splitted_params);
 }
 
 /**
@@ -105,6 +105,8 @@ export function get_rule_by_name(
   // Then add params to ParsedRule
   if (Array.isArray(rule_params)) {
     parsed_rule.params = rule_params as Array<any>;
+  } else if (rule_params) {
+    parsed_rule.params = [rule_params] as Array<any>;
   }
 
   // If params is function that means that this type of ruleset is passed
